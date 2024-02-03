@@ -1,3 +1,5 @@
+local colors = require("min-theme.colors")
+
 require('min-theme').setup({
     -- (note: if your configuration sets vim.o.background the following option will do nothing!)
     theme = 'dark',        -- String: 'dark' or 'light', determines the colorscheme used
@@ -9,6 +11,11 @@ require('min-theme').setup({
         strings = false,   -- Boolean: Italicizes strings
         variables = false, -- Boolean: Italicizes variables
     },
-    overrides = {},        -- A dictionary of group names, can be a function returning a dictionary or a table.
+    overrides = {
+    }, -- A dictionary of group names, can be a function returning a dictionary or a table.
 })
-vim.cmd [[colorscheme min-theme]]
+
+-- vim.cmd [[colorscheme min-theme]]
+-- vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "Yellow" })
+vim.api.nvim_set_hl(0, "NonText", { fg = "Gray" })
+vim.api.nvim_set_hl(0, "SpecialKey", { fg = "Gray" })

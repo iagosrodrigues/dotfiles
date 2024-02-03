@@ -1,9 +1,10 @@
-vim.o.guicursor = ""
+vim.o.guicursor = "n-v-c:block-Cursor"
 vim.o.encoding = "utf-8"
 vim.o.fileencoding = "utf-8"
 
 vim.o.nu = true
 vim.o.relativenumber = true
+vim.o.cursorline = true
 
 vim.o.tabstop = 4
 vim.o.softtabstop = 4
@@ -27,6 +28,16 @@ vim.o.termguicolors = true
 vim.o.scrolloff = 8
 vim.o.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
+
+vim.o.list = true
+vim.opt.listchars = {
+    tab = "  ",
+    eol = "↲",
+    nbsp = "␣",
+    trail = "•",
+    -- extends = "⟩",
+    -- precedes = "⟨",
+}
 
 vim.o.updatetime = 50
 
