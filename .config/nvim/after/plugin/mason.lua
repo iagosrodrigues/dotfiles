@@ -5,7 +5,7 @@ require("mason").setup()
 require("mason-lspconfig").setup({
     ensure_installed = {
         "tsserver",
-        "rust_analyzer",
+        -- "rust_analyzer",
         "lua_ls"
     },
     handlers = {
@@ -13,18 +13,18 @@ require("mason-lspconfig").setup({
             require("lspconfig")[server_name].setup {}
             capabilities = capabilities
         end,
-        rust_analyzer = function()
-            lspconfig.rust_analyzer.setup {
-                capabilities = capabilities,
-                settings = {
-                    ["rust-analyzer"] = {
-                        checkOnSave = {
-                            command = "clippy"
-                        }
-                    }
-                }
-            }
-        end,
+        -- rust_analyzer = function()
+        --     lspconfig.rust_analyzer.setup {
+        --         capabilities = capabilities,
+        --         settings = {
+        --             ["rust-analyzer"] = {
+        --                 checkOnSave = {
+        --                     command = "clippy"
+        --                 }
+        --             }
+        --         }
+        --     }
+        -- end,
         lua_ls = function()
             lspconfig.lua_ls.setup {
                 capabilities = capabilities,

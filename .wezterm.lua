@@ -14,7 +14,7 @@ end
 
 -- For example, changing the color scheme:
 config.color_scheme = 'Catppuccin Mocha'
-config.default_cursor_style = 'SteadyBar'
+-- config.default_cursor_style = 'SteadyBar'
 
 config.font = wezterm.font_with_fallback {
     -- 'Jetbrains Mono',
@@ -28,14 +28,14 @@ config.font = wezterm.font_with_fallback {
     -- 'Symbols Nerd Font',
 }
 
-config.font_size = 15.0
-config.line_height = 1.618
+config.font_size = 19.0
+-- config.line_height = 1.618
 -- config.line_height = 1.3
 config.hide_tab_bar_if_only_one_tab = true
 
 config.use_fancy_tab_bar = false
 config.enable_scroll_bar = false
-config.window_decorations = "RESIZE"
+-- config.window_decorations = "RESIZE"
 
 config.window_padding = {
     left = 0,
