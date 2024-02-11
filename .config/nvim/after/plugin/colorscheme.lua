@@ -1,5 +1,5 @@
--- require("colorbuddy").colorscheme("sitrusbuddy")
-require("colorbuddy").colorscheme("gruvbuddy")
+require("colorbuddy").colorscheme("sitrusbuddy")
+-- require("colorbuddy").colorscheme("gruvbuddy")
 
 -- local c = require("colorbuddy.color").colors
 -- local Group = require("colorbuddy.group").Group

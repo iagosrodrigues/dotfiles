@@ -1,10 +1,11 @@
-vim.o.guicursor = "n-v-c:block-Cursor"
+-- vim.o.guicursor = "n-v-c:block-Cursor"
+vim.o.guicursor = ""
 vim.o.encoding = "utf-8"
 vim.o.fileencoding = "utf-8"
 
 vim.o.nu = true
 vim.o.relativenumber = true
-vim.o.cursorline = true
+vim.o.cursorline = false
 
 vim.o.tabstop = 4
 vim.o.softtabstop = 4
@@ -48,10 +49,17 @@ vim.g.mapleader = " "
 -- vim.o.foldmethod = "expr"
 -- vim.o.foldexpr = "nvim_treesitter#foldexpr()"
 
+-- Netrw {{{
+vim.g.netrw_browse_split = 0
+vim.g.netrw_banner = 0
+vim.g.netrw_winsize = 25
+-- }}}
+
+
 if vim.g.neovide then
     vim.g.neovide_input_use_logo = 1
     vim.g.neovide_input_macos_alt_is_meta = false
-    vim.o.guifont = "GeistMono Nerd Font:h18"
+    vim.o.guifont = "MonoLisa Nerd Font:h20"
     vim.opt.linespace = 2
     vim.g.neovide_padding_top = 20
     vim.g.neovide_padding_bottom = 20
