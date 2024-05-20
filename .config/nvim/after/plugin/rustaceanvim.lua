@@ -1,0 +1,15 @@
+-- vim.g.rustaceanvim = function()
+-- 	local extension_path = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/"
+-- 	local codelldb_path = extension_path .. "adapter/codelldb"
+-- 	local liblldb_path = extension_path .. "lldb/lib/liblldb"
+--
+-- 	-- The liblldb extension is .so for Linux and .dylib for MacOS
+-- 	liblldb_path = liblldb_path .. ".dylib"
+--
+-- 	local cfg = require("rustaceanvim.config")
+-- 	return {
+-- 		dap = {
+-- 			adapter = cfg.get_codelldb_adapter(codelldb_path, liblldb_path),
+-- 		},
+-- 	}
+-- end

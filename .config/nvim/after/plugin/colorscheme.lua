@@ -1,4 +1,7 @@
-require("colorbuddy").colorscheme("sitrusbuddy")
+-- vim.cmd[[colorscheme catppuccin-mocha]]
+--
+-- require("colorbuddy").colorscheme("sitrusbuddy")
+-- require("monokai-pro").setup()
 -- require("colorbuddy").colorscheme("gruvbuddy")
 
 -- local c = require("colorbuddy.color").colors
