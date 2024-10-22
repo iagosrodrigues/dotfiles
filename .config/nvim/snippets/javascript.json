@@ -1,7 +1,0 @@
-{
-    "type": {
-        "prefix": "tt",
-        "body": "/** @type {${1:Type}} */",
-        "description": "JSDoc type annotation"
-    }
-}
