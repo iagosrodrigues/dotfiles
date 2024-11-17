@@ -16,6 +16,7 @@ require("lazy").setup {
 }
 
 require "autocmds"
+require "configs.visual"
 
 vim.schedule(function()
   require "mappings"

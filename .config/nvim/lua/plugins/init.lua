@@ -117,97 +117,17 @@ return {
   },
   {
     "j-hui/fidget.nvim",
-    opts = {},
+    config = function()
+      local fidget = require "fidget"
+
+      vim.notify = fidget.notify
+    end,
   },
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     init = require("configs.lualine").init,
     opts = require("configs.lualine").opts,
-  },
-  {
-    "folke/noice.nvim",
-    event = "VeryLazy",
-    opts = require("configs.noice").opts,
-    keys = {
-      { "<leader>sn", "", desc = "+noice" },
-      {
-        "<S-Enter>",
-        function()
-          require("noice").redirect(vim.fn.getcmdline())
-        end,
-        mode = "c",
-        desc = "Redirect Cmdline",
-      },
-      {
-        "<leader>snl",
-        function()
-          require("noice").cmd "last"
-        end,
-        desc = "Noice Last Message",
-      },
-      {
-        "<leader>snh",
-        function()
-          require("noice").cmd "history"
-        end,
-        desc = "Noice History",
-      },
-      {
-        "<leader>sna",
-        function()
-          require("noice").cmd "all"
-        end,
-        desc = "Noice All",
-      },
-      {
-        "<leader>snd",
-        function()
-          require("noice").cmd "dismiss"
-        end,
-        desc = "Dismiss All",
-      },
-      {
-        "<leader>snt",
-        function()
-          require("noice").cmd "pick"
-        end,
-        desc = "Noice Picker (Telescope/FzfLua)",
-      },
-      {
-        "<c-f>",
-        function()
-          if not require("noice.lsp").scroll(4) then
-            return "<c-f>"
-          end
-        end,
-        silent = true,
-        expr = true,
-        desc = "Scroll Forward",
-        mode = { "i", "n", "s" },
-      },
-      {
-        "<c-b>",
-        function()
-          if not require("noice.lsp").scroll(-4) then
-            return "<c-b>"
-          end
-        end,
-        silent = true,
-        expr = true,
-        desc = "Scroll Backward",
-        mode = { "i", "n", "s" },
-      },
-    },
-    config = function(_, opts)
-      -- HACK: noice shows messages from before it was enabled,
-      -- but this is not ideal when Lazy is installing plugins,
-      -- so clear the messages in this case.
-      if vim.o.filetype == "lazy" then
-        vim.cmd [[messages clear]]
-      end
-      require("noice").setup(opts)
-    end,
   },
   {
     "hrsh7th/nvim-cmp",
@@ -222,23 +142,9 @@ return {
   },
   {
     "lewis6991/gitsigns.nvim",
-    opts = {
-      signs = {
-        add = { text = "▎" },
-        change = { text = "▎" },
-        delete = { text = "" },
-        topdelete = { text = "" },
-        changedelete = { text = "▎" },
-        untracked = { text = "▎" },
-      },
-      signs_staged = {
-        add = { text = "▎" },
-        change = { text = "▎" },
-        delete = { text = "" },
-        topdelete = { text = "" },
-        changedelete = { text = "▎" },
-      },
-    },
+    config = function()
+      require "configs.gitsigns"
+    end,
   },
   -- {
   --   "navarasu/onedark.nvim",
@@ -267,16 +173,16 @@ return {
       -- vim.cmd "colorscheme atlas"
     end,
   },
-  {
-    "rcarriga/nvim-notify",
-    config = function()
-      local notify = require "notify"
-      notify.setup {
-        background_colour = "#000000",
-      }
-      vim.notify = notify
-    end,
-  },
+  -- {
+  --     "rcarriga/nvim-notify",
+  --     config = function()
+  --         local notify = require "notify"
+  --         notify.setup {
+  --             background_colour = "#000000",
+  --         }
+  --         vim.notify = notify
+  --     end,
+  -- },
   {
     "nvim-telescope/telescope.nvim",
     tag = "0.1.8",
@@ -284,5 +190,16 @@ return {
     config = function()
       require "configs.telescope"
     end,
+  },
+
+  { "rose-pine/neovim", name = "rose-pine" },
+
+  {
+    "rbong/vim-flog",
+    lazy = true,
+    cmd = { "Flog", "Flogsplit", "Floggit" },
+    dependencies = {
+      "tpope/vim-fugitive",
+    },
   },
 }

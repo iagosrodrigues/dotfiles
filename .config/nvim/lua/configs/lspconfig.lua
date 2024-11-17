@@ -51,7 +51,7 @@ M.capabilities.textDocument.completion.completionItem = {
   },
 }
 
-local servers = { "lua_ls", "vtsls", "tailwindcss", "gopls", "zls", "clangd" }
+local servers = { "lua_ls", "vtsls", "tailwindcss", "gopls", "zls", "clangd", "pyright", "yamlls" }
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {

@@ -1,10 +1,14 @@
 local options = {
   formatters_by_ft = {
     lua = { "stylua" },
-    python = { "isort", "black" },
+    python = { "ruff" },
     javascript = { "prettierd", "prettier", stop_after_first = true },
+    json = { "prettierd", "prettier", stop_after_first = true },
+    typescript = { { "prettierd", "prettier" } },
+    typescriptreact = { { "prettierd", "prettier" } },
     html = { "prettierd" },
-    css = { "stylelint " },
+    css = { "stylelint" },
+    yaml = { "prettier" },
   },
 
   format_on_save = {
