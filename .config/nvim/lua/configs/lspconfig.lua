@@ -51,7 +51,7 @@ M.capabilities.textDocument.completion.completionItem = {
   },
 }
 
-local servers = { "lua_ls", "vtsls", "tailwindcss", "gopls", "zls", "clangd", "pyright", "yamlls" }
+local servers = { "lua_ls", "vtsls", "tailwindcss", "gopls", "zls", "clangd", "yamlls" }
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
@@ -60,3 +60,35 @@ for _, lsp in ipairs(servers) do
     capabilities = M.capabilities,
   }
 end
+
+lspconfig.ruff.setup {
+  on_attach = M.on_attach,
+  on_init = M.on_init,
+  capabilities = M.capabilities,
+  init_options = {
+    settings = {
+      fixAll = true,
+      organizeImports = true,
+    },
+  },
+}
+
+lspconfig.pylsp.setup {}
+
+-- lspconfig.pyright.setup {
+--   on_attach = M.on_attach,
+--   on_init = M.on_init,
+--   capabilities = M.capabilities,
+--   settings = {
+--     pyright = {
+--       -- Using Ruff's import organizer
+--       disableOrganizeImports = true,
+--     },
+--     -- python = {
+--     --   analysis = {
+--     --     -- Ignore all files for analysis to exclusively use Ruff for linting
+--     --     ignore = { "*" },
+--     --   },
+--     -- },
+--   },
+-- }

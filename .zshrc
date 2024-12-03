@@ -111,4 +111,3 @@ then
     zle -N _aichat_zsh
     bindkey '^e' _aichat_zsh
 fi
-
