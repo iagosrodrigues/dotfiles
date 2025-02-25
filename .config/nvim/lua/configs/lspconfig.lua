@@ -3,14 +3,22 @@ local M = {}
 local map = vim.keymap.set
 local lspconfig = require "lspconfig"
 
-M.on_attach = function(_, bufnr)
+M.on_attach = function(client, bufnr)
   local function opts(desc)
     return { buffer = bufnr, desc = "LSP " .. desc }
   end
 
+  if client then
+    if client.supports_method("textDocument/rename") then
+      map("n", "<leader>cd", vim.lsp.buf.rename, opts "Rename")
+    end
+    if client.supports_method("textDocument/implementation") then
+      map("n", "gi", vim.lsp.buf.implementation, opts "Go to implementation")
+    end
+  end
+
   map("n", "gD", vim.lsp.buf.declaration, opts "Go to declaration")
   map("n", "gd", vim.lsp.buf.definition, opts "Go to definition")
-  map("n", "gi", vim.lsp.buf.implementation, opts "Go to implementation")
   map("n", "<leader>sh", vim.lsp.buf.signature_help, opts "Show signature help")
   map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts "Add workspace folder")
   map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts "Remove workspace folder")
@@ -51,7 +59,7 @@ M.capabilities.textDocument.completion.completionItem = {
   },
 }
 
-local servers = { "lua_ls", "vtsls", "tailwindcss", "gopls", "zls", "clangd", "yamlls" }
+local servers = { "lua_ls", "vtsls", "tailwindcss", "gopls", "zls", "clangd", "yamlls", "html" }
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
@@ -73,22 +81,22 @@ lspconfig.ruff.setup {
   },
 }
 
-lspconfig.pylsp.setup {}
+-- lspconfig.pylsp.setup {}
 
--- lspconfig.pyright.setup {
---   on_attach = M.on_attach,
---   on_init = M.on_init,
---   capabilities = M.capabilities,
---   settings = {
---     pyright = {
---       -- Using Ruff's import organizer
---       disableOrganizeImports = true,
---     },
---     -- python = {
---     --   analysis = {
---     --     -- Ignore all files for analysis to exclusively use Ruff for linting
---     --     ignore = { "*" },
---     --   },
---     -- },
---   },
--- }
+lspconfig.pyright.setup {
+  on_attach = M.on_attach,
+  on_init = M.on_init,
+  capabilities = M.capabilities,
+  settings = {
+    pyright = {
+      -- Using Ruff's import organizer
+      disableOrganizeImports = true,
+    },
+    -- python = {
+    --   analysis = {
+    --     -- Ignore all files for analysis to exclusively use Ruff for linting
+    --     ignore = { "*" },
+    --   },
+    -- },
+  },
+}

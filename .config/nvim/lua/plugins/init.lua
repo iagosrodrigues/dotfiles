@@ -1,5 +1,17 @@
 return {
   {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({
+        suggestion = {
+          auto_trigger = true
+        }
+      })
+    end,
+  },
+  {
     "stevearc/conform.nvim",
     event = "BufWritePre",
     keys = {
@@ -76,7 +88,7 @@ return {
     },
   },
 
-  { "Bilal2453/luvit-meta", lazy = true },
+  { "Bilal2453/luvit-meta",             lazy = true },
 
   {
     "nvim-treesitter/nvim-treesitter",
@@ -192,7 +204,7 @@ return {
     end,
   },
 
-  { "rose-pine/neovim", name = "rose-pine" },
+  { "rose-pine/neovim",                           name = "rose-pine" },
 
   {
     "rbong/vim-flog",
@@ -203,17 +215,18 @@ return {
     },
   },
 
-  {
-    "github/copilot.vim",
-    config = function()
-      vim.g.copilot_no_tab_map = true
-
-      vim.keymap.set(
-        "i",
-        "<c-y>",
-        'copilot#Accept("\\<CR>")',
-        { expr = true, replace_keycodes = false, desc = "Accept Copilot suggestion" }
-      )
-    end,
-  },
+  -- {
+  --   "github/copilot.vim",
+  --   config = function()
+  --     vim.g.copilot_no_tab_map = true
+  --
+  --     vim.keymap.set(
+  --       "i",
+  --       "<c-y>",
+  --       'copilot#Accept("\\<CR>")',
+  --       { expr = true, replace_keycodes = false, desc = "Accept Copilot suggestion" }
+  --     )
+  --   end,
+  -- },
+  --
 }
