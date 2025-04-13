@@ -1,21 +1,22 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, ... }:
-
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  config,
+  pkgs,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.initrd.luks.devices."luks-f0937bec-cf24-4ca0-8cc2-d6d6421abf62".device = "/dev/disk/by-uuid/f0937bec-cf24-4ca0-8cc2-d6d6421abf62";
-  networking.hostName = "gigawhite"; # Define your hostname.
+  networking.hostName = "gigawhite";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -45,10 +46,14 @@
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
+  services.xserver.videoDrivers = ["amdgpu"];
 
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  # services.xserver.desktopManager.plasma5.enable = true;
+  services.desktopManager.plasma6.enable = true;
+
+  # services.localtimed.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -63,7 +68,7 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -85,34 +90,47 @@
   services.xrdp.defaultWindowManager = "startplasma-x11";
   services.xrdp.openFirewall = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.iago = {
-    isNormalUser = true;
-    description = "iago";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-      kate
-    #  thunderbird
-    ];
-  };
+  services.timesyncd.enable = false;
 
   # Install firefox.
   programs.firefox.enable = true;
 
+  programs.steam = {
+    enable = true;
+    gamescopeSession.enable = true;
+  };
+
+  programs.gamescope = {
+    enable = true;
+    capSysNice = true;
+  };
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.allowUnfreePredicate = (pkg: true);
+  nixpkgs.config.allowUnfreePredicate = pkg: true;
+
+  fonts.packages = with pkgs; [
+    geist-font
+  ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     gcc
     neovim
-  #  wget
+    glib-networking
+    mangohud
+    #  wget
   ];
 
   environment.sessionVariables = {
     LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
+    GIO_MODULE_DIR = "${pkgs.glib-networking}/lib/gio/modules";
+  };
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
   };
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -142,22 +160,28 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.11"; # Did you read the comment?
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
 
-  systemd.services = {
-    stagentd = {
-      description = "Netskope client daemon";
-      wantedBy = [ "multi-user.target" ];
-      # after = [ "network.target" ];
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "/opt/netskope/stagent/stAgentSvc";
-        WorkingDirectory = "/opt/netskope/stagent";
-        KillMode = "progress";
-        Restart = "always";
-        RestartSec = "10";
-        TimeoutStopSec = "10";
-      };
-    }
+  local = {
+    infinality.enable = true;
+    io-schedulers.enable = true;
+    programs.lact.enable = true;
   };
+
+  # systemd.services = {
+  #   stagentd = {
+  #     description = "Netskope client daemon";
+  #     wantedBy = [ "multi-user.target" ];
+  #     # after = [ "network.target" ];
+  #     serviceConfig = {
+  #       Type = "simple";
+  #       ExecStart = "/opt/netskope/stagent/stAgentSvc";
+  #       WorkingDirectory = "/opt/netskope/stagent";
+  #       KillMode = "progress";
+  #       Restart = "always";
+  #       RestartSec = "10";
+  #       TimeoutStopSec = "10";
+  #     };
+  #   };
+  # };
 }
