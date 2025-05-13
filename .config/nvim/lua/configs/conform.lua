@@ -1,7 +1,8 @@
 local options = {
   formatters_by_ft = {
     lua = { "stylua" },
-    python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
+    -- python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
+    python = {},
     javascript = { "prettierd", "prettier", stop_after_first = true },
     json = { "prettierd", "prettier", stop_after_first = true },
     typescript = { "prettierd", "prettier", stop_after_first = true },

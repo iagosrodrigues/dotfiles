@@ -1,7 +1,6 @@
-require("mason").setup {
-  ensure_installed = {},
-}
+require("mason").setup()
 
 require("mason-lspconfig").setup {
-  ensure_installed = { "lua_ls", "vtsls", "rust_analyzer", "gopls", "templ", "zls", "clangd", "pyright" },
+  automatic_installation = true,
+  ensure_installed = { "lua_ls", "vtsls", "rust_analyzer", "gopls", "templ", "zls", "clangd", "pylsp" },
 }

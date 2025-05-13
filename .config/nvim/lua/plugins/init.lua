@@ -1,4 +1,31 @@
 return {
+  -- Firulas
+  { "nvim-lua/plenary.nvim" },
+  {
+    "folke/snacks.nvim",
+    priority = 1000,
+    lazy = false,
+    opts = {
+      bigfile = { enabled = true },
+      dashboard = { enabled = true },
+      explorer = { enabled = true },
+      indent = { enabled = true },
+      input = { enabled = true },
+      picker = { enabled = true },
+      notifier = { enabled = true },
+      quickfile = { enabled = true },
+      scope = { enabled = true },
+      -- scroll = { enabled = true },
+      statuscolumn = { enabled = true },
+      words = { enabled = true },
+    }
+  },
+  -- {
+  --   'tzachar/local-highlight.nvim',
+  --   config = function()
+  --     require('local-highlight').setup()
+  --   end
+  -- },
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
@@ -31,14 +58,53 @@ return {
     config = function()
       require "configs.mason"
     end,
+    init = function(_)
+      local pylsp = require("mason-registry").get_package("python-lsp-server")
+      pylsp:on("install:success", function()
+        local function mason_package_path(package)
+          local path = vim.fn.resolve(vim.fn.stdpath("data") .. "/mason/packages/" .. package)
+          return path
+        end
+
+        local path = mason_package_path("python-lsp-server")
+        local command = path .. "/venv/bin/pip"
+        local args = {
+          "install",
+          "-U",
+          "pylsp-rope",
+          "python-lsp-black",
+          "python-lsp-isort",
+          "python-lsp-ruff",
+          "pyls-memestra",
+          "pylsp-mypy",
+        }
+
+        require("plenary.job")
+            :new({
+              command = command,
+              args = args,
+              cwd = path,
+            })
+            :start()
+
+        print("Installed python-lsp-server plugins")
+      end)
+    end
   },
   { "williamboman/mason-lspconfig.nvim" },
+  {
+    "jay-babu/mason-nvim-dap.nvim",
+    config = function()
+      require("mason-nvim-dap").setup({ ensure_installed = { "python" } })
+    end
+  },
   {
     "neovim/nvim-lspconfig",
     config = function()
       require "configs.lspconfig"
     end,
   },
+  { "RRethy/vim-illuminate" },
   {
     "folke/trouble.nvim",
     opts = {}, -- for default options, refer to the configuration section for custom setup.
@@ -77,6 +143,19 @@ return {
     },
   },
   {
+    "rcarriga/nvim-dap-ui",
+    dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+    config = function()
+      require("configs.dap")
+    end
+  },
+  {
+    "mfussenegger/nvim-dap-python",
+    config = function()
+      require("dap-python").setup("python3")
+    end
+  },
+  {
     "folke/lazydev.nvim",
     ft = "lua", -- only load on lua files
     opts = {
@@ -84,11 +163,12 @@ return {
         -- See the configuration section for more details
         -- Load luvit types when the `vim.uv` word is found
         { path = "luvit-meta/library", words = { "vim%.uv" } },
+        "nvim-dap-ui",
       },
     },
   },
 
-  { "Bilal2453/luvit-meta",             lazy = true },
+  { "Bilal2453/luvit-meta", lazy = true },
 
   {
     "nvim-treesitter/nvim-treesitter",
@@ -132,7 +212,7 @@ return {
     config = function()
       local fidget = require "fidget"
 
-      vim.notify = fidget.notify
+      -- vim.notify = fidget.notify
     end,
   },
   {
@@ -198,7 +278,6 @@ return {
   {
     "nvim-telescope/telescope.nvim",
     tag = "0.1.8",
-    dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       require "configs.telescope"
     end,
@@ -214,7 +293,6 @@ return {
       "tpope/vim-fugitive",
     },
   },
-
   -- {
   --   "github/copilot.vim",
   --   config = function()
