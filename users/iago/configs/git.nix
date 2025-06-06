@@ -2,7 +2,9 @@
   config,
   pkgs,
   ...
-}: {
+}: let
+  onePassPath = "~/.1password/agent.sock";
+in {
   programs.git = {
     enable = true;
     userName = "Iago S. Rodrigues";
@@ -21,5 +23,12 @@
       s = "status -s";
       ss = "status";
     };
+  };
+  programs.ssh = {
+    enable = true;
+    extraConfig = ''
+      Host *
+        IdentityAgent ${onePassPath}
+    '';
   };
 }

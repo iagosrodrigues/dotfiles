@@ -52,6 +52,7 @@
         )
         discoveredUsers;
       home-manager.sharedModules = attrValues discoveredHomeModules;
+      home-manager.backupFileExtension = "backup";
     };
   in {
     lib = localLib;

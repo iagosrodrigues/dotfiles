@@ -50,8 +50,9 @@
 
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
   services.desktopManager.plasma6.enable = true;
+  services.displayManager.defaultSession = "plasma";
 
   # services.localtimed.enable = true;
 
@@ -92,9 +93,6 @@
 
   services.timesyncd.enable = false;
 
-  # Install firefox.
-  programs.firefox.enable = true;
-
   programs.steam = {
     enable = true;
     gamescopeSession.enable = true;
@@ -103,6 +101,13 @@
   programs.gamescope = {
     enable = true;
     capSysNice = true;
+  };
+
+  programs._1password.enable = true;
+  programs._1password-gui = {
+    enable = true;
+
+    polkitPolicyOwners = ["iago"];
   };
 
   # Allow unfree packages
@@ -126,6 +131,15 @@
   environment.sessionVariables = {
     LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
     GIO_MODULE_DIR = "${pkgs.glib-networking}/lib/gio/modules";
+  };
+
+  environment.etc = {
+    "1password/custom_allowed_browsers" = {
+      text = ''
+        firefox
+      '';
+      mode = "0755";
+    };
   };
 
   programs.direnv = {
