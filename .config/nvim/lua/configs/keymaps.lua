@@ -1,6 +1,7 @@
 local map = vim.keymap.set
 
 map("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search" })
+map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Set location list" })
 map("n", ";", ":", { desc = "CMD enter command mode" })
 
 map({ "n", "v", "i" }, "<Up>", "<nop>")

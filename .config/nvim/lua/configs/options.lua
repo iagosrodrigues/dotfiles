@@ -1,8 +1,11 @@
 local o = vim.o
 local opt = vim.opt
 
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
 o.encoding = "utf-8"
--- o.fileencoding = "utf-8"
+o.fileencoding = "utf-8"
 
 o.nu = true
 o.relativenumber = true
@@ -34,3 +37,7 @@ opt.isfname:append "@-@"
 o.updatetime = 50
 
 o.colorcolumn = "100"
+
+opt.completeopt:append("noselect")
+
+o.winborder = "rounded"
