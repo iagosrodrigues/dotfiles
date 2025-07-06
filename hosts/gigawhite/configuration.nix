@@ -95,13 +95,13 @@
 
   programs.steam = {
     enable = true;
-    gamescopeSession.enable = true;
+    # gamescopeSession.enable = true;
   };
 
-  programs.gamescope = {
-    enable = true;
-    capSysNice = true;
-  };
+  # programs.gamescope = {
+  #   enable = true;
+  #   capSysNice = true;
+  # };
 
   programs._1password.enable = true;
   programs._1password-gui = {
@@ -116,6 +116,7 @@
 
   fonts.packages = with pkgs; [
     geist-font
+    # maple-mono
   ];
 
   # List packages installed in system profile. To search, run:
@@ -125,6 +126,7 @@
     neovim
     glib-networking
     mangohud
+    # virt-manager
     #  wget
   ];
 
@@ -181,6 +183,10 @@
     io-schedulers.enable = true;
     programs.lact.enable = true;
   };
+
+  # virtualization
+  # virtualisation.libvirtd.enable = true;
+
 
   # systemd.services = {
   #   stagentd = {
