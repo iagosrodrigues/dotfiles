@@ -39,7 +39,8 @@
       discord
       zed-editor
       nixd
-      code-cursor
+      # code-cursor
+      nodejs_22
       # netskope-client
     ];
 
