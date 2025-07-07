@@ -3,6 +3,8 @@
   username,
   ...
 }: {
+  nixpkgs.config.allowUnfree = true;
+
   programs = {
     home-manager = {
       enable = true;
@@ -24,6 +26,7 @@
     packages = with pkgs; [
       tmux
       _1password-gui
+      _1password-cli
       ghostty
       telegram-desktop
       xsel
@@ -39,7 +42,8 @@
       discord
       zed-editor
       nixd
-      # code-cursor
+      fnm
+      alejandra
       nodejs_22
       # netskope-client
     ];
