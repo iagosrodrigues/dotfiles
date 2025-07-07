@@ -2,7 +2,8 @@
   pkgs,
   username,
   ...
-}: {
+}:
+{
   nixpkgs.config.allowUnfree = true;
 
   programs = {
@@ -24,32 +25,37 @@
     stateVersion = "24.11";
 
     packages = with pkgs; [
-      tmux
-      _1password-gui
       _1password-cli
-      ghostty
-      telegram-desktop
-      xsel
-      wl-clipboard
-      eza
-      stow
+      _1password-gui
+      alejandra
       clang
-      zig
-      unzip
-      go
-      unixtools.xxd
       direnv
       discord
-      zed-editor
-      nixd
+      eza
       fnm
-      alejandra
+      ghostty
+      go
+      kitty
+      nil
+      nixd
       nodejs_22
+      poetry
+      stow
+      telegram-desktop
+      tmux
+      unixtools.xxd
+      unzip
+      wl-clipboard
+      wofi
+      xsel
+      zed-editor
+      zig
       # netskope-client
     ];
 
     sessionVariables = {
       EDITOR = "nvim";
+      NIXOS_OZONE_WL = "1";
     };
   };
 

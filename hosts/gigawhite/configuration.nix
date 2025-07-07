@@ -2,10 +2,12 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
+  inputs,
   config,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -15,7 +17,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.initrd.luks.devices."luks-f0937bec-cf24-4ca0-8cc2-d6d6421abf62".device = "/dev/disk/by-uuid/f0937bec-cf24-4ca0-8cc2-d6d6421abf62";
+  boot.initrd.luks.devices."luks-f0937bec-cf24-4ca0-8cc2-d6d6421abf62".device =
+    "/dev/disk/by-uuid/f0937bec-cf24-4ca0-8cc2-d6d6421abf62";
   networking.hostName = "gigawhite";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -46,7 +49,7 @@
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  services.xserver.videoDrivers = ["amdgpu"];
+  services.xserver.videoDrivers = [ "amdgpu" ];
 
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
@@ -71,6 +74,7 @@
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
+  security.polkit.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -107,8 +111,18 @@
   programs._1password-gui = {
     enable = true;
 
-    polkitPolicyOwners = ["iago"];
+    polkitPolicyOwners = [ "iago" ];
   };
+
+  programs.hyprland = {
+    enable = true;
+    # package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+    # portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+  };
+
+  # programs.hyprlock = {
+  #   enable = true;
+  # };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -116,6 +130,7 @@
 
   fonts.packages = with pkgs; [
     geist-font
+    nerd-fonts.symbols-only
     # maple-mono
   ];
 
@@ -123,9 +138,13 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     gcc
-    neovim
     glib-networking
+    hyprpaper
+    hyprpolkitagent
+    hyprshot
     mangohud
+    neovim
+    waybar
     # virt-manager
     #  wget
   ];
@@ -176,7 +195,10 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.11"; # Did you read the comment?
 
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   local = {
     infinality.enable = true;
@@ -186,7 +208,6 @@
 
   # virtualization
   # virtualisation.libvirtd.enable = true;
-
 
   # systemd.services = {
   #   stagentd = {

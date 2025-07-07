@@ -2,10 +2,11 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   programs.fish = {
     enable = true;
-    plugins = [];
+    plugins = [ ];
   };
 
   programs.mise = {
