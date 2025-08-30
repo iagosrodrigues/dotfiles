@@ -175,7 +175,7 @@ in
 
       gpg = {
         ssh = {
-          program = "${pkgs._1password-gui}/op-ssh-sign";
+          program = "${pkgs._1password-gui}/bin/op-ssh-sign";
           allowedSignersFile = "~/.ssh/allowed_signers";
         };
         format = "ssh";
