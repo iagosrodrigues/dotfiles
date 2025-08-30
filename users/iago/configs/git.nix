@@ -1,10 +1,11 @@
 {
-  config,
   pkgs,
   ...
-}: let
+}:
+let
   onePassPath = "~/.1password/agent.sock";
-in {
+in
+{
   programs.git = {
     enable = true;
     userName = "Iago S. Rodrigues";
@@ -76,6 +77,7 @@ in {
 
       commit = {
         template = "~/.gitmessage";
+        gpgsign = true;
       };
 
       github = {
@@ -173,7 +175,7 @@ in {
 
       gpg = {
         ssh = {
-          program = "${pkgs._1password-gui}/bin/op-ssh-sign";
+          program = "${pkgs._1password-gui}/op-ssh-sign";
           allowedSignersFile = "~/.ssh/allowed_signers";
         };
         format = "ssh";

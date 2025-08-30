@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   username,
   ...
@@ -19,6 +20,23 @@
     };
   };
 
+  programs.zed-editor = {
+    enable = true;
+    extensions = [
+      "biome"
+    ];
+    userSettings = {
+      lsp = {
+        biome = {
+          binary = {
+            arguments = [ "lsp-proxy" ];
+            path = lib.getExe pkgs.biome;
+          };
+        };
+      };
+    };
+  };
+
   home = {
     inherit username;
     homeDirectory = "/home/${username}";
@@ -26,20 +44,22 @@
 
     packages = with pkgs; [
       _1password-cli
-      _1password-gui
       alejandra
+      biome
       clang
-      direnv
       discord
+      electrum
       eza
       fnm
       ghostty
+      glib
       go
       kitty
       nil
       nixd
       nodejs_22
       poetry
+      ripgrep
       stow
       telegram-desktop
       tmux
@@ -48,7 +68,6 @@
       wl-clipboard
       wofi
       xsel
-      zed-editor
       zig
       # netskope-client
     ];

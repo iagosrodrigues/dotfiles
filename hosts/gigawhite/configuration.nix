@@ -2,8 +2,6 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
-  inputs,
-  config,
   pkgs,
   ...
 }:
@@ -81,7 +79,7 @@
     alsa.support32Bit = true;
     pulse.enable = true;
     # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
+    # jack.enable = true;
 
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
@@ -91,21 +89,15 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  services.xrdp.enable = true;
-  services.xrdp.defaultWindowManager = "startplasma-x11";
-  services.xrdp.openFirewall = true;
+  # services.xrdp.enable = true;
+  # services.xrdp.defaultWindowManager = "startplasma-x11";
+  # services.xrdp.openFirewall = true;
 
   services.timesyncd.enable = false;
 
   programs.steam = {
     enable = true;
-    # gamescopeSession.enable = true;
   };
-
-  # programs.gamescope = {
-  #   enable = true;
-  #   capSysNice = true;
-  # };
 
   programs._1password.enable = true;
   programs._1password-gui = {
@@ -115,10 +107,18 @@
   };
 
   programs.hyprland = {
-    enable = true;
+    enable = false;
     # package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     # portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
   };
+
+  programs.virt-manager.enable = true;
+
+  users.groups.libvirtd.members = [ "iago" ];
+
+  # virtualization
+  virtualisation.libvirtd.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true;
 
   # programs.hyprlock = {
   #   enable = true;
@@ -139,12 +139,12 @@
   environment.systemPackages = with pkgs; [
     gcc
     glib-networking
-    hyprpaper
-    hyprpolkitagent
-    hyprshot
+    # hyprpaper
+    # hyprpolkitagent
+    # hyprshot
     mangohud
     neovim
-    waybar
+    # waybar
     # virt-manager
     #  wget
   ];
@@ -187,6 +187,19 @@
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
+  # VPN bridge
+  networking.bridges.br0.interfaces = [ "eno1" ];
+
+  networking.interfaces = {
+    eno1 = {
+      useDHCP = false;
+    };
+
+    br0 = {
+      useDHCP = true;
+    };
+  };
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
@@ -205,9 +218,6 @@
     io-schedulers.enable = true;
     programs.lact.enable = true;
   };
-
-  # virtualization
-  # virtualisation.libvirtd.enable = true;
 
   # systemd.services = {
   #   stagentd = {
