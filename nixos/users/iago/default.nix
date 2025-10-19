@@ -1,14 +1,12 @@
-{ pkgs, ... }:
-{
+{...}: {
   isNormalUser = true;
-  description = "iago";
+  description = "Iago Sousa Rodrigues";
   extraGroups = [
     "networkmanager"
     "wheel"
     "input"
     "libvirtd"
   ];
-  packages = with pkgs; [
-    kdePackages.kate
+  packages = [
   ];
 }

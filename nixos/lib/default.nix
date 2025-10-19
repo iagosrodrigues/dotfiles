@@ -29,10 +29,12 @@
         })
         validDirs;
     in
-      lib.listToAttrs (map (m: {
-        name = m.name;
-        value = import m.value;
-      }) (moduleFiles ++ moduleDirs));
+      lib.listToAttrs (
+        map (m: {
+          name = m.name;
+          value = import m.value;
+        }) (moduleFiles ++ moduleDirs)
+      );
 
   mapPackages = dir:
     if !lib.pathExists dir
@@ -54,11 +56,13 @@
       packageFiles = lib.mapAttrsToList mkPackage packageNixFiles;
       allPotentialPackages = packageFiles ++ packageDirs;
     in
-      lib.listToAttrs (map (p: {
+      lib.listToAttrs (
+        map (p: {
           name = p.name;
           value = import p.value;
         })
-        allPotentialPackages);
+        allPotentialPackages
+      );
 
   mapUsers = dir: let
     userDirs = scanPaths dir "directory";
@@ -97,12 +101,20 @@
     hostDirs;
 
   forAllSystems = f:
-    lib.listToAttrs (map
-      (system: {
+    lib.listToAttrs (
+      map (system: {
         name = system;
         value = f system;
       })
-      inputs.nixpkgs.lib.systems.flakeExposed);
+      inputs.nixpkgs.lib.systems.flakeExposed
+    );
 in {
-  inherit scanPaths discoverModules mapPackages mapUsers mapHosts forAllSystems;
+  inherit
+    scanPaths
+    discoverModules
+    mapPackages
+    mapUsers
+    mapHosts
+    forAllSystems
+    ;
 }

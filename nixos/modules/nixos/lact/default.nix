@@ -5,9 +5,9 @@
   ...
 }:
 with lib; let
-  cfg = config.local.programs.lact;
+  cfg = config.local.lact;
 in {
-  options.local.programs.lact = {
+  options.local.lact = {
     enable = mkEnableOption "AMDGPU control software";
     config = mkOption {
       type = lib.types.attrs;

@@ -4,7 +4,6 @@
 {
   config,
   lib,
-  pkgs,
   modulesPath,
   ...
 }: {
@@ -12,26 +11,36 @@
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod"];
+  boot.initrd.availableKernelModules = [
+    "nvme"
+    "xhci_pci"
+    "ahci"
+    "usbhid"
+    "usb_storage"
+    "sd_mod"
+  ];
   boot.initrd.kernelModules = [];
-  boot.kernelModules = ["amdgpu"];
+  boot.kernelModules = ["kvm-amd"];
   boot.extraModulePackages = [];
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/d6708cab-42e8-4d5d-a28f-07306c2b46d9";
+    device = "/dev/disk/by-uuid/210ed440-0a3a-4efd-bbe7-fc69f136bbcd";
     fsType = "ext4";
   };
 
-  boot.initrd.luks.devices."luks-9fd3ab40-d1ae-459c-9116-92af0126422c".device = "/dev/disk/by-uuid/9fd3ab40-d1ae-459c-9116-92af0126422c";
+  boot.initrd.luks.devices."luks-8a11e66b-0937-4e07-a7b1-5c3101f3c9e3".device = "/dev/disk/by-uuid/8a11e66b-0937-4e07-a7b1-5c3101f3c9e3";
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/DB3E-62DC";
+    device = "/dev/disk/by-uuid/9B31-E15B";
     fsType = "vfat";
-    options = ["fmask=0077" "dmask=0077"];
+    options = [
+      "fmask=0077"
+      "dmask=0077"
+    ];
   };
 
   swapDevices = [
-    {device = "/dev/disk/by-uuid/c9a302a8-f9d2-4b48-b503-f6a678ca98e2";}
+    {device = "/dev/disk/by-uuid/f20a74c5-75f7-4533-af7e-64f9362a0e55";}
   ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -43,7 +52,4 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-  hardware.graphics.extraPackages = [
-    pkgs.amdvlk
-  ];
 }

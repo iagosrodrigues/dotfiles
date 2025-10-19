@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 let
   onePassPath = "~/.1password/agent.sock";
 in
@@ -49,6 +46,10 @@ in
 
       credential = {
         helper = "store";
+      };
+
+      IncludeIf."gitdir:~/work/" = {
+        path = "~/work/.gitconfig";
       };
 
       rebase = {
@@ -262,9 +263,13 @@ in
 
   programs.ssh = {
     enable = true;
-    extraConfig = ''
-      Host *
-        IdentityAgent ${onePassPath}
-    '';
+    enableDefaultConfig = false;
+    matchBlocks."*" = {
+      identityAgent = "${onePassPath}";
+    };
+    matchBlocks."*.lojasrenner.io" = {
+      identityAgent = "${onePassPath}";
+      proxyCommand = "nc -x 192.168.122.237:1080 -X 5 %h %p";
+    };
   };
 }
