@@ -80,6 +80,20 @@ with hmLib.hm.gvariant; {
               path = lib.getExe pkgs.biome;
             };
           };
+          nil = {
+            binary = {
+              path = lib.getExe pkgs.nil;
+            };
+            initialization_options = {
+              formatting = {
+                command = [
+                  "alejandra"
+                  "--quiet"
+                  "--"
+                ];
+              };
+            };
+          };
         };
       };
     };

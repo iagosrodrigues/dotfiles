@@ -1,4 +1,4 @@
-{...}: {
+{pkgs, ...}: {
   isNormalUser = true;
   description = "Iago Sousa Rodrigues";
   extraGroups = [
@@ -7,6 +7,7 @@
     "input"
     "libvirtd"
   ];
-  packages = [
+  packages = with pkgs; [
+    amp-cli
   ];
 }

@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -11,7 +12,8 @@
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  boot.initrd.luks.devices."luks-dc16fe29-43f1-4b77-a160-62cfe275333e".device = "/dev/disk/by-uuid/dc16fe29-43f1-4b77-a160-62cfe275333e";
+  boot.initrd.luks.devices."luks-dc16fe29-43f1-4b77-a160-62cfe275333e".device =
+    "/dev/disk/by-uuid/dc16fe29-43f1-4b77-a160-62cfe275333e";
   networking.hostName = "darkplace";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -30,7 +32,7 @@
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  services.xserver.videoDrivers = ["amdgpu"];
+  services.xserver.videoDrivers = [ "amdgpu" ];
 
   # Enable the GNOME Desktop Environment.
   services.displayManager.gdm.enable = true;
