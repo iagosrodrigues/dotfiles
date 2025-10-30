@@ -3,6 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-cursor-pr.url = "github:jetpham/nixpkgs/update-cursor-2.0.38";
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 
     nur.url = "github:nix-community/NUR";
 
@@ -15,10 +17,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    lanzaboote = {
-      url = "github:nix-community/lanzaboote";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # lanzaboote = {
+    #   url = "github:nix-community/lanzaboote";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -73,7 +75,7 @@
       home-manager.useGlobalPkgs = true;
       home-manager.useUserPackages = true;
       home-manager.sharedModules = attrValues discoveredHomeModules;
-      home-manager.backupFileExtension = "backup";
+      # home-manager.backupFileExtension = "backup";
     };
   in {
     lib = localLib;
@@ -118,10 +120,21 @@
                 {
                   nixpkgs = {
                     config.allowUnfree = true;
-                    overlays = [inputs.nur.overlays.default];
+                    overlays = [
+                      inputs.nur.overlays.default
+                      # Overlay to use code-cursor from PR #456882
+                      (final: prev: {
+                        code-cursor =
+                          (import inputs.nixpkgs-cursor-pr {
+                            inherit system;
+                            config.allowUnfree = true;
+                          }).code-cursor;
+                      })
+                    ];
                   };
                 }
               ]
+              ++ [inputs.chaotic.nixosModules.default]
               ++ (attrValues discoveredNixosModules)
               ++ (lib.optionals hasUsers [
                 inputs.home-manager.nixosModules.home-manager
