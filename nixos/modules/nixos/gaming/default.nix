@@ -74,7 +74,12 @@ in {
     environment.systemPackages =
       (lib.optionals cfg.settings.mangohud.enable [pkgs.mangohud])
       ++ (lib.optionals cfg.settings.hdr.enable [pkgs.gamescope-wsi])
-      ++ (lib.optionals cfg.settings.vkbasalt.enable [pkgs.vkbasalt]);
+      ++ (lib.optionals cfg.settings.vkbasalt.enable [pkgs.vkbasalt])
+      ++ [
+        pkgs.ffmpeg
+        pkgs.libva-utils
+        pkgs.vdpauinfo
+      ];
 
     systemd.tmpfiles.rules = lib.mkIf cfg.settings.rt.enable [
       "w /proc/sys/kernel/sched_autogroup_enabled - - - - 1"
@@ -109,7 +114,12 @@ in {
       localNetworkGameTransfers.openFirewall = lib.mkDefault true;
       gamescopeSession.enable = lib.mkDefault false;
       protontricks.enable = lib.mkDefault true;
-      # extraCompatPackages = cfg.steam.compatPackages;
+      extraCompatPackages = [pkgs.proton-ge-custom];
+    };
+
+    hardware.graphics = {
+      enable = true;
+      enable32Bit = true;
     };
 
     programs.gamemode = {
