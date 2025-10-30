@@ -2,12 +2,11 @@
   isNormalUser = true;
   description = "Iago Sousa Rodrigues";
   extraGroups = [
-    "networkmanager"
-    "wheel"
+    "docker"
     "input"
     "libvirtd"
-  ];
-  packages = with pkgs; [
-    amp-cli
+    "networkmanager"
+    "video"
+    "wheel"
   ];
 }
