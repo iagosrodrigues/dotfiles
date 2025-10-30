@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -12,8 +11,7 @@
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  boot.initrd.luks.devices."luks-dc16fe29-43f1-4b77-a160-62cfe275333e".device =
-    "/dev/disk/by-uuid/dc16fe29-43f1-4b77-a160-62cfe275333e";
+  boot.initrd.luks.devices."luks-dc16fe29-43f1-4b77-a160-62cfe275333e".device = "/dev/disk/by-uuid/dc16fe29-43f1-4b77-a160-62cfe275333e";
   networking.hostName = "darkplace";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -32,17 +30,12 @@
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  services.xserver.videoDrivers = [ "amdgpu" ];
+  services.xserver.videoDrivers = ["amdgpu"];
 
-  # Enable the GNOME Desktop Environment.
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome = {
-    enable = true;
-    extraGSettingsOverrides = ''
-      [org.gnome.desktop.wm.preferences]
-      button-layout=':minimize,maximize,close'
-    '';
-  };
+  # Enable the KDE Plasma Desktop Environment.
+  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
+  services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -152,19 +145,29 @@
     nix-direnv.enable = true;
   };
 
+  programs.nix-ld.enable = true;
+
   local = {
+    # impermanence = {
+    #   enable = true;
+    #   extraConfig.directories = [
+    #     "/var/lib/libvirt"
+    #     "/var/lib/sbctl"
+    #   ];
+    # };
     _1password.enable = true;
-    infinality.enable = true;
+    infinality.enable = false;
     io-schedulers.enable = true;
     lact.enable = true;
     tuning.enable = true;
     virtualisation.enable = true;
+    virtualisation.docker.enable = true;
 
     gaming = {
       enable = true;
       settings = {
-        vkbasalt.enable = true;
-        ntsync.enable = true;
+        vkbasalt.enable = false;
+        ntsync.enable = false;
         mangohud.enable = true;
       };
       gamemode = {
