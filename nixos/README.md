@@ -120,6 +120,67 @@ Drop module directories into:
 
 Modules are automatically imported and available to all configurations.
 
+## Switching Desktop Environments
+
+### From GNOME to KDE Plasma
+
+To migrate from GNOME to KDE Plasma:
+
+1. **Update host configuration** (`hosts/HOSTNAME/configuration.nix`):
+   ```nix
+   # Replace GNOME configuration
+   services.displayManager.gdm.enable = true;
+   services.desktopManager.gnome.enable = true;
+   
+   # With KDE Plasma configuration
+   services.displayManager.sddm.enable = true;
+   services.displayManager.sddm.wayland.enable = true;
+   services.desktopManager.plasma6.enable = true;
+   ```
+
+2. **Update user packages** (`users/USERNAME/home.nix`):
+   - Remove GNOME-specific packages (gnomeExtensions.*, gnome-tweaks, etc.)
+   - Add KDE packages if needed:
+     ```nix
+     packages = with pkgs; [
+       kdePackages.dolphin      # File manager
+       kdePackages.kate         # Text editor
+       kdePackages.konsole      # Terminal
+       kdePackages.spectacle    # Screenshots
+     ];
+     ```
+
+3. **Remove GNOME dconf settings** (`users/USERNAME/home.nix`):
+   - Remove the entire `dconf` section with GNOME-specific settings
+
+4. **Rebuild your system**:
+   ```bash
+   sudo nixos-rebuild switch --flake .#HOSTNAME
+   ```
+
+5. **Reboot** to ensure all changes take effect
+
+### From KDE Plasma to GNOME
+
+To switch back from KDE Plasma to GNOME, reverse the process:
+
+1. **Update host configuration** (`hosts/HOSTNAME/configuration.nix`):
+   ```nix
+   # Replace KDE Plasma configuration
+   services.displayManager.sddm.enable = true;
+   services.desktopManager.plasma6.enable = true;
+   
+   # With GNOME configuration
+   services.displayManager.gdm.enable = true;
+   services.desktopManager.gnome.enable = true;
+   ```
+
+2. **Update user packages** to include GNOME extensions and tools
+
+3. **Add dconf settings** for GNOME customization if needed
+
+4. **Rebuild and reboot**
+
 ## Flake Inputs
 
 This configuration uses:
