@@ -6,6 +6,30 @@
   ...
 }:
 with hmLib.hm.gvariant; {
+  # Enable Qt theming with dark mode
+  qt = {
+    enable = true;
+    platformTheme.name = "kde";
+    style = {
+      name = "breeze";
+      package = pkgs.kdePackages.breeze;
+    };
+  };
+
+  # Enable GTK theming with dark mode
+  gtk = {
+    enable = true;
+    colorScheme = "dark";
+  };
+
+  # Set color scheme preference for applications
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      force = true;
+      color-scheme = "prefer-dark";
+    };
+  };
+
   programs = {
     home-manager = {
       enable = true;
@@ -72,7 +96,7 @@ with hmLib.hm.gvariant; {
       userSettings = {
         buffer_font_family = "Maple Mono";
         buffer_font_size = 18;
-        vim_mode = true;
+        vim_mode = false;
         lsp = {
           biome = {
             binary = {
@@ -105,29 +129,33 @@ with hmLib.hm.gvariant; {
     stateVersion = "25.05";
 
     packages = with pkgs; [
-      gnomeExtensions.appindicator
-      gnomeExtensions.astra-monitor
-      gnomeExtensions.bluetooth-battery-meter
-      gnomeExtensions.blur-my-shell
-      gnomeExtensions.clipboard-indicator
-      gnomeExtensions.dash-to-dock
-      gnome-tweaks
-      gnome-shell-extensions
-      gnome-extension-manager
-      nautilus
-      resources
       _1password-cli
+      adwaita-icon-theme
       alejandra
+      amp-cli
+      # cargo
+      clang
+      code-cursor
+      codex
       eza
+      fd
       ghostty
+      kdePackages.dolphin
+      kdePackages.kate
+      kdePackages.konsole
+      kdePackages.spectacle
+      mongodb-compass
       nil
       nixd
+      nodejs
       ripgrep
+      # rustc
       telegram-desktop
       unixtools.xxd
       unzip
       wl-clipboard
-      codex
+      zig
+      zls
     ];
 
     sessionVariables = {
@@ -135,58 +163,6 @@ with hmLib.hm.gvariant; {
       NIXOS_OZONE_WL = "1";
       TG_DOWNLOAD_DIR = "$HOME/.terragrunt-cache";
       MOZ_ENABLE_WAYLAND = "1";
-    };
-  };
-
-  dconf = {
-    enable = true;
-    settings = {
-      "org/gnome/shell" = {
-        disable-user-extensions = false;
-        enabled-extensions = [
-          "appindicatorsupport@rgcjonas.gmail.com"
-          "Bluetooth-Battery-Meter@maniacx.github.com"
-          "blur-my-shell@aunetx"
-          "clipboard-indicator@tudmotu.com"
-          "dash-to-dock@micxgx.gmail.com"
-          "monitor@astraext.github.io"
-          "user-theme@gnome-shell-extensions.gcampax.github.com"
-        ];
-      };
-
-      "org/gnome/desktop/interface" = {
-        color-scheme = "prefer-dark";
-        gtk-theme = "adw-gtk3-dark";
-        icon-theme = "Tela-dark";
-      };
-
-      "org/gnome/desktop/input-sources" = {
-        sources = [
-          (mkTuple [
-            "xkb"
-            "us+alt-intl"
-          ])
-        ];
-        xkb-options = ["lv3:switch"]; # Make right ctrl alternate characters key
-      };
-
-      "org/gnome/desktop/peripherals/keyboard" = {
-        delay = mkUint32 300;
-        repeat-interval = mkUint32 20;
-      };
-
-      "org/gnome/desktop/peripherals/mouse" = {
-        accel-profile = "default";
-        speed = -0.5;
-      };
-
-      "org/gnome/mutter" = {
-        experimental-features = [
-          "scale-monitor-framebuffer"
-          "variable-refresh-rate"
-          "xwayland-native-scaling"
-        ];
-      };
     };
   };
 
