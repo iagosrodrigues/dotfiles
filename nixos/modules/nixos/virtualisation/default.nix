@@ -30,6 +30,6 @@ in {
     programs.virt-manager.enable = true;
 
     environment.systemPackages =
-      lib.optionals cfg.docker.enable [pkgs.k3d];
+      lib.optionals cfg.docker.enable [pkgs.k3d pkgs.kubectl];
   };
 }

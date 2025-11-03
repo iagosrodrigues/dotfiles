@@ -604,18 +604,18 @@
         "type": "github"
       }
     },
-    "nixpkgs-cursor-pr": {
+    "nixpkgs-code-cursor": {
       "locked": {
-        "lastModified": 1761791774,
-        "narHash": "sha256-557WxdWDUsRcNLepe4fi6U1CYaXaXb9ctoAs/hsF/do=",
-        "owner": "jetpham",
+        "lastModified": 1761858372,
+        "narHash": "sha256-Tle7o2Bn25xQspfNdFlm8/Nc43TjSbG/mDndYuaUn78=",
+        "owner": "iagosrodrigues",
         "repo": "nixpkgs",
-        "rev": "a533941e29a39bfee9813c36ad1ac031338fd23c",
+        "rev": "005cb7ed883938d7bc8962312dcc808ddba4c8b5",
         "type": "github"
       },
       "original": {
-        "owner": "jetpham",
-        "ref": "update-cursor-2.0.38",
+        "owner": "iagosrodrigues",
+        "ref": "feature/code-cursor-2.0.43",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -736,7 +736,7 @@
         "hyprland": "hyprland",
         "impermanence": "impermanence",
         "nixpkgs": "nixpkgs_3",
-        "nixpkgs-cursor-pr": "nixpkgs-cursor-pr",
+        "nixpkgs-code-cursor": "nixpkgs-code-cursor",
         "nur": "nur",
         "rust-overlay": "rust-overlay_2"
       }
