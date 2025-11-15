@@ -68,6 +68,13 @@ in {
       };
       enableNotifications = lib.mkEnableOption "Enable notifications on the startup and end of execution";
     };
+    wivrn = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = cfg.enable;
+        description = "Enable wivrn configuration";
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -147,6 +154,13 @@ in {
           end = lib.mkDefault "${pkgs.libnotify}/bin/notify-send 'GameMode Ended'";
         };
       };
+    };
+
+    services.wivrn = lib.mkIf cfg.wivrn.enable {
+      enable = true;
+      openFirewall = true;
+      defaultRuntime = true;
+      autoStart = true;
     };
   };
 }

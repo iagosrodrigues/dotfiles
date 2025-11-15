@@ -9,16 +9,14 @@ with hmLib.hm.gvariant; {
   # Enable Qt theming with dark mode
   qt = {
     enable = true;
-    platformTheme.name = "kde";
-    style = {
-      name = "breeze";
-      package = pkgs.kdePackages.breeze;
-    };
+    # platformTheme.name = "kde";
+    style.name = "kvantum";
   };
 
   # Enable GTK theming with dark mode
   gtk = {
     enable = true;
+    gtk2.force = true;
     colorScheme = "dark";
   };
 
@@ -133,7 +131,8 @@ with hmLib.hm.gvariant; {
       adwaita-icon-theme
       alejandra
       amp-cli
-      # cargo
+      btop
+      cargo
       clang
       code-cursor
       codex
@@ -142,14 +141,16 @@ with hmLib.hm.gvariant; {
       ghostty
       kdePackages.dolphin
       kdePackages.kate
+      kdePackages.kcalc
       kdePackages.konsole
       kdePackages.spectacle
+      ladybird
       mongodb-compass
       nil
       nixd
       nodejs
       ripgrep
-      # rustc
+      rustc
       telegram-desktop
       unixtools.xxd
       unzip
