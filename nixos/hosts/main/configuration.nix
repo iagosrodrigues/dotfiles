@@ -78,10 +78,10 @@
   nixpkgs.config.allowUnfree = true;
 
   fonts.packages = with pkgs; [
-    maple-mono.variable
+    _0xproto
     geist-font
+    maple-mono.variable
     nerd-fonts.symbols-only
-    # maple-mono
   ];
 
   # List packages installed in system profile. To search, run:
@@ -90,6 +90,7 @@
     neovim
     git
     sbctl
+    kwin-effects-forceblur
     #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     #  wget
   ];
