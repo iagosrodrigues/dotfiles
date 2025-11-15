@@ -15,7 +15,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     # Fork do nixpkgs com code-cursor em versão específica (PR #456882)
-    nixpkgs-code-cursor.url = "github:iagosrodrigues/nixpkgs/feature/code-cursor-2.0.43";
+    my-overlays.url = "github:iagosrodrigues/nixpkgs/feature/wivrn";
 
     # Repositório de pacotes extras da comunidade
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
@@ -57,6 +57,11 @@
     # Hyprland: compositor Wayland
     hyprland = {
       url = "github:hyprwm/Hyprland";
+    };
+
+    kwin-effects-forceblur = {
+      url = "github:taj-ny/kwin-effects-forceblur";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -268,11 +273,12 @@
                       # Overlay customizado para usar code-cursor do fork
                       # (necessário enquanto o PR #456882 não é merged)
                       (final: prev: {
-                        code-cursor =
-                          (import inputs.nixpkgs-code-cursor {
-                            inherit system;
-                            config.allowUnfree = true;
-                          }).code-cursor;
+                        wivrn = (import inputs.my-overlays {inherit system;}).wivrn;
+                      })
+
+                      # Overlay para kwin-effects-forceblur
+                      (final: prev: {
+                        kwin-effects-forceblur = inputs.kwin-effects-forceblur.packages.${system}.default;
                       })
                     ];
                   };
@@ -280,10 +286,8 @@
               ]
               # 4. Módulo padrão do Chaotic (pacotes extras)
               ++ [inputs.chaotic.nixosModules.default]
-
               # 5. Todos os módulos NixOS descobertos automaticamente
               ++ (attrValues discoveredNixosModules)
-
               # 6. Integração com Home Manager (se houver usuários)
               ++ (lib.optionals hasUsers [
                 inputs.home-manager.nixosModules.home-manager
