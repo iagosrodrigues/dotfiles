@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{...}: {
   isNormalUser = true;
   description = "Iago Sousa Rodrigues";
   extraGroups = [
