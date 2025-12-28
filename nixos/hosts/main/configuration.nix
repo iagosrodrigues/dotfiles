@@ -9,7 +9,8 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_cachyos;
 
   boot.initrd.luks.devices."luks-dc16fe29-43f1-4b77-a160-62cfe275333e".device = "/dev/disk/by-uuid/dc16fe29-43f1-4b77-a160-62cfe275333e";
   networking.hostName = "darkplace";
@@ -27,24 +28,25 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
+  i18n.inputMethod.enable = false;
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  services.xserver.videoDrivers = ["amdgpu"];
+  services.xserver = {
+    enable = true;
+    videoDrivers = ["amdgpu"];
+    xkb = {
+      layout = "us";
+      variant = "intl";
+    };
+  };
 
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
   services.displayManager.sddm.wayland.enable = true;
   services.desktopManager.plasma6.enable = true;
 
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "intl";
-  };
-
   # Configure console keymap
-  console.keyMap = "us-acentos";
+  console.keyMap = "us";
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -80,8 +82,10 @@
   fonts.packages = with pkgs; [
     _0xproto
     geist-font
+    julia-mono
     maple-mono.variable
     nerd-fonts.symbols-only
+    victor-mono
   ];
 
   # List packages installed in system profile. To search, run:
@@ -90,7 +94,6 @@
     neovim
     git
     sbctl
-    kwin-effects-forceblur
     #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     #  wget
   ];
@@ -127,6 +130,7 @@
       experimental-features = [
         "nix-command"
         "flakes"
+        "pipe-operators"
       ];
       auto-optimise-store = true;
       warn-dirty = false;
@@ -141,21 +145,14 @@
     optimise.automatic = true;
   };
 
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-  };
+  # programs.direnv = {
+  #   enable = true;
+  #   nix-direnv.enable = true;
+  # };
 
   programs.nix-ld.enable = true;
 
   local = {
-    # impermanence = {
-    #   enable = true;
-    #   extraConfig.directories = [
-    #     "/var/lib/libvirt"
-    #     "/var/lib/sbctl"
-    #   ];
-    # };
     _1password.enable = true;
     infinality.enable = false;
     io-schedulers.enable = true;

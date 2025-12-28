@@ -112,9 +112,6 @@ in {
       enable = lib.mkDefault true;
       package = pkgs.steam.override {
         extraEnv = cfg.steam.extraEnv;
-        extraProfile = ''
-          unset TZ
-        '';
       };
       remotePlay.openFirewall = lib.mkDefault true; # Open ports in the firewall for Steam Remote Play
       dedicatedServer.openFirewall = lib.mkDefault true; # Open ports in the firewall for Source Dedicated Server
