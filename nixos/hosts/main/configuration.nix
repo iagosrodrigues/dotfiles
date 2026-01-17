@@ -5,14 +5,22 @@
   ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    kernelPackages = pkgs.linuxPackages_latest;
+    initrd.luks.devices."luks-dc16fe29-43f1-4b77-a160-62cfe275333e".device = "/dev/disk/by-uuid/dc16fe29-43f1-4b77-a160-62cfe275333e";
+  };
+  # boot.loader.systemd-boot.enable = true;
+  # boot.loader.efi.canTouchEfiVariables = true;
 
   # Use latest kernel.
   # boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelPackages = pkgs.linuxPackages_cachyos;
+  # boot.kernelPackages = pkgs.linuxPackages_cachyos;
 
-  boot.initrd.luks.devices."luks-dc16fe29-43f1-4b77-a160-62cfe275333e".device = "/dev/disk/by-uuid/dc16fe29-43f1-4b77-a160-62cfe275333e";
+  # boot.initrd.luks.devices."luks-dc16fe29-43f1-4b77-a160-62cfe275333e".device = "/dev/disk/by-uuid/dc16fe29-43f1-4b77-a160-62cfe275333e";
   networking.hostName = "darkplace";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -82,6 +90,7 @@
   fonts.packages = with pkgs; [
     _0xproto
     geist-font
+    jetbrains-mono
     julia-mono
     maple-mono.variable
     nerd-fonts.symbols-only
@@ -124,6 +133,11 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.05"; # Did you read the comment?
+
+  hardware.graphics.extraPackages = with pkgs; [
+    rocmPackages.clr.icd
+    rocmPackages.rocm-runtime
+  ];
 
   nix = {
     settings = {

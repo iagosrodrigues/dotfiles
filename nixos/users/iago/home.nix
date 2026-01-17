@@ -34,7 +34,7 @@ with hmLib.hm.gvariant; {
     };
 
     nvf = {
-      enable = true;
+      enable = false;
       settings = {
         vim = {
           lazy.plugins = {
@@ -337,9 +337,12 @@ with hmLib.hm.gvariant; {
         "docker-compose"
       ];
       userSettings = {
-        buffer_font_family = ".ZedMono";
+        buffer_font_family = "0xProto";
         buffer_font_size = 18;
         vim_mode = true;
+        features = {
+          edit_prediction_provider = "copilot";
+        };
         lsp = {
           biome = {
             binary = {
@@ -383,7 +386,7 @@ with hmLib.hm.gvariant; {
       enableFishIntegration = true;
 
       settings = {
-        font-family = "Julia Mono";
+        font-family = "0xProto";
         font-size = 18;
         theme = "Gruvbox Material";
         command = "/etc/profiles/per-user/iago/bin/fish";
@@ -396,7 +399,20 @@ with hmLib.hm.gvariant; {
     homeDirectory = "/home/${username}";
     stateVersion = "25.05";
 
+    pointerCursor = {
+      gtk.enable = true;
+      hyprcursor = {
+        enable = true;
+        size = 32;
+      };
+      package = pkgs.adwaita-icon-theme;
+      name = "Adwaita";
+      size = 32;
+    };
+
     packages = with pkgs; [
+      (ollama.override {acceleration = "rocm";})
+      (pkgs.ffmpeg-full.override {withUnfree = true;})
       _1password-cli
       adwaita-icon-theme
       alejandra
@@ -407,10 +423,14 @@ with hmLib.hm.gvariant; {
       clippy
       code-cursor
       codex
+      dejavu_fonts
       eza
       fd
+      google-chrome
       google-java-format
+      inconsolata
       jetbrains.idea
+      jujutsu
       kdePackages.dolphin
       kdePackages.kate
       kdePackages.kcalc
@@ -422,9 +442,12 @@ with hmLib.hm.gvariant; {
       nix-output-monitor
       nixd
       nodejs
+      opencode
       ripgrep
+      rocmPackages.rocm-smi
       rustc
       rustfmt
+      statix
       telegram-desktop
       unixtools.xxd
       unzip
@@ -439,6 +462,8 @@ with hmLib.hm.gvariant; {
       MOZ_ENABLE_WAYLAND = "1";
     };
   };
+
+  fonts.fontconfig.enable = true;
 
   systemd.user.sessionVariables = {
     GTK_IM_MODULE = "simple";

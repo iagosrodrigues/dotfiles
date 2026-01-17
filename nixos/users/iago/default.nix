@@ -6,6 +6,7 @@
     "input"
     "libvirtd"
     "networkmanager"
+    "render"
     "video"
     "wheel"
   ];

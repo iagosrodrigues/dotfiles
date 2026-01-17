@@ -2,7 +2,6 @@
   description = "Main NixOS configuration";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     nvf = {
       url = "github:NotAShelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -54,22 +53,24 @@
             lib.recursiveUpdate userAttrsFromFile {}
         )
         discoveredUsers;
-      home-manager.users =
-        mapAttrs (
-          username: userData: (import userData.homeConfigPath {
-            inherit
-              username
-              pkgs
-              config
-              lib
-              ;
-            hmLib = inputs.home-manager.lib;
-          })
-        )
-        discoveredUsers;
-      home-manager.useGlobalPkgs = true;
-      home-manager.useUserPackages = true;
-      home-manager.sharedModules = [inputs.nvf.homeManagerModules.default] ++ (attrValues discoveredHomeModules);
+      home-manager = {
+        users =
+          mapAttrs (
+            username: userData: (import userData.homeConfigPath {
+              inherit
+                username
+                pkgs
+                config
+                lib
+                ;
+              hmLib = inputs.home-manager.lib;
+            })
+          )
+          discoveredUsers;
+        useGlobalPkgs = true;
+        useUserPackages = true;
+        sharedModules = [inputs.nvf.homeManagerModules.default] ++ (attrValues discoveredHomeModules);
+      };
     };
   in {
     lib = localLib;
@@ -89,8 +90,8 @@
     nixosConfigurations =
       mapAttrs (
         hostname: hostData: let
-          hostAttrs = hostData.hostAttrs;
-          system = hostAttrs.system;
+          inherit (hostData) hostAttrs;
+          inherit (hostAttrs) system;
           hostSpecificSpecialArgs = hostAttrs.specialArgs or {};
           hostSpecificModules = hostAttrs.modules or [];
           specialArgs =
@@ -123,7 +124,7 @@
                   };
                 }
               ]
-              ++ [inputs.chaotic.nixosModules.default]
+              # ++ [inputs.chaotic.nixosModules.default]
               ++ (attrValues discoveredNixosModules)
               ++ (lib.optionals hasUsers [
                 inputs.home-manager.nixosModules.home-manager

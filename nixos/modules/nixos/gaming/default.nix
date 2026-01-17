@@ -83,7 +83,7 @@ in {
       ++ (lib.optionals cfg.settings.hdr.enable [pkgs.gamescope-wsi])
       ++ (lib.optionals cfg.settings.vkbasalt.enable [pkgs.vkbasalt])
       ++ [
-        pkgs.ffmpeg
+        pkgs.ffmpeg-full
         pkgs.libva-utils
         pkgs.vdpauinfo
       ];
@@ -118,7 +118,7 @@ in {
       localNetworkGameTransfers.openFirewall = lib.mkDefault true;
       gamescopeSession.enable = lib.mkDefault false;
       protontricks.enable = lib.mkDefault true;
-      extraCompatPackages = [pkgs.proton-ge-custom];
+      extraCompatPackages = [pkgs.proton-ge-bin];
     };
 
     hardware.graphics = {

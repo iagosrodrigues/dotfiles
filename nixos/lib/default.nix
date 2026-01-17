@@ -13,7 +13,7 @@
     if !lib.pathExists dir
     then {}
     else let
-      files = scanPaths dir "regular";
+      files = scanPaths dir "file";
       dirs = scanPaths dir "directory";
 
       mkModule = name: path: {
@@ -82,7 +82,6 @@
         defaultNixPath = "${userDir}/default.nix";
         homeNixPath = "${userDir}/home.nix";
       in
-        # Cada usuário DEVE ter ambos os arquivos
         if lib.pathExists defaultNixPath && lib.pathExists homeNixPath
         then {
           defaultNixPath = defaultNixPath;
