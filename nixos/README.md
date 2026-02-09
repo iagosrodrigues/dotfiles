@@ -1,212 +1,345 @@
-# NixOS Configuration
+# NixOS Flake (flake-parts)
 
-A modular NixOS flake configuration with automatic host, user, and module discovery.
+A clean, maintainable NixOS configuration using flake-parts and import-tree.
 
-## Structure
-
-```
-.
-├── flake.nix              # Main flake configuration
-├── hosts/                 # Host-specific configurations
-│   └── main/              # Example host configuration
-├── users/                 # User configurations with home-manager
-│   └── iago/              # Example user
-├── modules/               # Reusable NixOS and home-manager modules
-│   └── nixos/             # NixOS system modules
-│       ├── 1password/
-│       ├── development/
-│       ├── gaming/
-│       ├── virtualisation/
-│       └── ...
-├── packages/              # Custom package definitions
-│   └── netskope-client/
-└── lib/                   # Helper functions for discovery
-```
-
-## Features
-
-- **Automatic Discovery**: Hosts, users, modules, and packages are automatically discovered
-- **Home Manager Integration**: User configurations with home-manager
-- **Secure Boot**: Lanzaboote support for secure boot
-- **Modular Design**: Reusable modules for different system features
-- **NUR Support**: Nix User repository overlay included
-
-## Usage Without Cloning
-
-### Quick System Rebuild
-
-Rebuild your system directly from GitHub:
+## Quick Start
 
 ```bash
-sudo nixos-rebuild switch --flake github:iagosrodrigues/dotfiles#HOSTNAME
+cd ~/personal/dotfiles/nixos/new-flake
+
+# Test build (safe - doesn't change system)
+nixos-rebuild build --flake .#main
+
+# Apply changes
+sudo nixos-rebuild switch --flake .#main
 ```
 
-Replace `iagosrodrigues/dotfiles` with your repository path and `HOSTNAME` with your host name (e.g., `main`).
+## Directory Structure
 
-### Test Configuration
-
-Test without switching:
-
-```bash
-sudo nixos-rebuild test --flake github:iagosrodrigues/dotfiles#HOSTNAME
+```
+new-flake/
+├── flake.nix                    # Main flake using flake-parts
+├── modules/
+│   ├── flake/                   # Flake-level configuration
+│   │   ├── devshell.nix         # Dev tools & formatter
+│   │   ├── home-manager.nix     # Home-manager base config
+│   │   └── nixpkgs.nix          # Nixpkgs config & overlays
+│   ├── hosts/
+│   │   └── darkplace.nix        # Host definition
+│   ├── hardware/
+│   │   └── darkplace.nix        # Hardware configuration
+│   ├── users/
+│   │   └── iago.nix             # User & home-manager config
+│   ├── private/
+│   │   └── default.nix          # Private flake integration
+│   ├── system/                  # System-level NixOS modules
+│   │   ├── audio.nix            # PipeWire audio
+│   │   ├── fonts.nix            # System fonts
+│   │   ├── io-schedulers.nix    # I/O scheduler tuning
+│   │   ├── lact.nix             # AMD GPU control
+│   │   ├── networking.nix       # Network & locale settings
+│   │   ├── nix.nix              # Nix settings & GC
+│   │   └── virtualisation.nix   # Docker, libvirt, etc.
+│   ├── desktop/                 # Desktop environment modules
+│   │   ├── ashell.nix           # Ashell status bar
+│   │   ├── gnome.nix            # GNOME DE + dconf
+│   │   └── niri.nix             # Niri compositor
+│   ├── gaming/                  # Gaming-related modules
+│   │   ├── gamemode.nix         # GameMode + kernel tuning
+│   │   ├── graphics.nix         # AMD GPU + ROCm
+│   │   ├── steam.nix            # Steam + Proton
+│   │   └── vr.nix               # VR (Envision, WiVRn)
+│   ├── apps/                    # Application modules
+│   │   ├── _1password.nix       # 1Password
+│   │   ├── browsers.nix         # Firefox, Chrome
+│   │   ├── ghostty.nix          # Ghostty terminal
+│   │   ├── git.nix              # Git configuration
+│   │   ├── media.nix            # Media apps
+│   │   └── zed.nix              # Zed editor
+│   ├── cli/                     # CLI tool modules
+│   │   ├── dev-tools.nix        # Development tools
+│   │   ├── shell.nix            # Fish shell
+│   │   └── tmux.nix             # Tmux configuration
+│   └── theming/
+│       └── dark.nix             # Dark theme settings
+└── README.md                    # This file
 ```
 
-### Build Only
+## Architecture
 
-Build the configuration without activating:
+This flake uses:
 
-```bash
-sudo nixos-rebuild build --flake github:iagosrodrigues/dotfiles#HOSTNAME
+- **[flake-parts](https://github.com/hercules-ci/flake-parts)**: Modular flake structure
+- **[import-tree](https://github.com/vic/import-tree)**: Automatic module discovery
+
+### How It Works
+
+The `flake.nix` is minimal:
+
+```nix
+{
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} (inputs.import-tree ./modules);
+}
 ```
 
-### Using a Specific Commit/Branch
+All configuration lives in `./modules/`. The import-tree recursively imports all `.nix` files, and flake-parts combines them into:
 
-```bash
-# Use a specific branch
-sudo nixos-rebuild switch --flake github:iagosrodrigues/dotfiles/BRANCH#HOSTNAME
+- `flake.modules.nixos.*` → NixOS modules
+- `flake.modules.homeManager.*` → Home-manager modules
+- `perSystem.*` → Per-system outputs (formatter, devShells)
+- `flake.nixosConfigurations.*` → Host definitions
 
-# Use a specific commit
-sudo nixos-rebuild switch --flake github:iagosrodrigues/dotfiles/COMMIT#HOSTNAME
+## Inputs
+
+| Input | Description |
+|-------|-------------|
+| `nixpkgs` | NixOS unstable |
+| `flake-parts` | Modular flake framework |
+| `import-tree` | Automatic module discovery |
+| `home-manager` | User environment management |
+| `nur` | Nix User Repository |
+| `alejandra` | Nix formatter |
+| `niri` | Scrollable tiling Wayland compositor |
+| `ghostty` | GPU-accelerated terminal |
+| `ashell` | Status bar for niri |
+| `hytale-launcher` | Hytale game launcher |
+| `rust-overlay` | Rust toolchain overlay |
+| `private` | Private configurations |
+
+## Module Types
+
+### NixOS Modules (`flake.modules.nixos.*`)
+
+System-level configuration applied via `nixosSystem`:
+
+```nix
+# modules/system/audio.nix
+{...}: {
+  flake.modules.nixos.audio = {
+    services.pipewire = {
+      enable = true;
+      alsa.enable = true;
+      pulse.enable = true;
+    };
+  };
+}
 ```
 
-## Initial Installation
+### Home-Manager Modules (`flake.modules.homeManager.*`)
 
-For a fresh installation:
+User-level configuration applied via `home-manager.sharedModules`:
 
-1. Boot into NixOS installer
-2. Partition and format your disks
-3. Generate hardware configuration:
-   ```bash
-   nixos-generate-config --root /mnt
-   ```
-4. Install directly from GitHub:
-   ```bash
-   sudo nixos-install --flake github:iagosrodrigues/dotfiles#HOSTNAME
-   ```
+```nix
+# modules/desktop/ashell.nix
+{...}: {
+  flake.modules.homeManager.ashell = {...}: {
+    programs.ashell = {
+      enable = true;
+      settings = { ... };
+    };
+  };
+}
+```
 
-## Adding a New Host
+### Combined Modules
 
-1. Create a new directory in `hosts/`:
-   ```
-   hosts/
-   └── NEW_HOSTNAME/
-       ├── default.nix              # Host attributes (system, modules)
-       ├── configuration.nix        # Main configuration
-       └── hardware-configuration.nix
-   ```
+Some modules define both NixOS and home-manager config:
 
-2. The host will be automatically discovered and available as:
-   ```bash
-   sudo nixos-rebuild switch --flake .#NEW_HOSTNAME
-   ```
+```nix
+# modules/desktop/gnome.nix
+{...}: {
+  flake.modules.nixos.gnome = {pkgs, ...}: {
+    services.desktopManager.gnome.enable = true;
+    # ...
+  };
 
-## Adding a New User
+  flake.modules.homeManager.gnome = {lib, ...}: {
+    dconf.settings = { ... };
+  };
+}
+```
 
-1. Create a new directory in `users/`:
-   ```
-   users/
-   └── iagosrodrigues/
-       ├── default.nix    # User system configuration
-       └── home.nix       # Home-manager configuration
-   ```
+### Host Definition
 
-2. Users are automatically discovered and configured
+```nix
+# modules/hosts/darkplace.nix
+{inputs, config, ...}: let
+  nixosModules = builtins.attrValues config.flake.modules.nixos;
+  hmModules = builtins.attrValues config.flake.modules.homeManager;
+in {
+  flake.nixosConfigurations.main = inputs.nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
+    modules = nixosModules ++ [{
+      home-manager.sharedModules = hmModules ++ [
+        inputs.niri.homeModules.niri
+      ];
+    }];
+  };
+}
+```
 
-## Adding Custom Modules
-
-Drop module directories into:
-- `modules/nixos/` for system-level modules
-- `modules/home-manager/` for user-level modules (if created)
-
-Modules are automatically imported and available to all configurations.
-
-## Switching Desktop Environments
-
-### From GNOME to KDE Plasma
-
-To migrate from GNOME to KDE Plasma:
-
-1. **Update host configuration** (`hosts/HOSTNAME/configuration.nix`):
-   ```nix
-   # Replace GNOME configuration
-   services.displayManager.gdm.enable = true;
-   services.desktopManager.gnome.enable = true;
-   
-   # With KDE Plasma configuration
-   services.displayManager.sddm.enable = true;
-   services.displayManager.sddm.wayland.enable = true;
-   services.desktopManager.plasma6.enable = true;
-   ```
-
-2. **Update user packages** (`users/USERNAME/home.nix`):
-   - Remove GNOME-specific packages (gnomeExtensions.*, gnome-tweaks, etc.)
-   - Add KDE packages if needed:
-     ```nix
-     packages = with pkgs; [
-       kdePackages.dolphin      # File manager
-       kdePackages.kate         # Text editor
-       kdePackages.konsole      # Terminal
-       kdePackages.spectacle    # Screenshots
-     ];
-     ```
-
-3. **Remove GNOME dconf settings** (`users/USERNAME/home.nix`):
-   - Remove the entire `dconf` section with GNOME-specific settings
-
-4. **Rebuild your system**:
-   ```bash
-   sudo nixos-rebuild switch --flake .#HOSTNAME
-   ```
-
-5. **Reboot** to ensure all changes take effect
-
-### From KDE Plasma to GNOME
-
-To switch back from KDE Plasma to GNOME, reverse the process:
-
-1. **Update host configuration** (`hosts/HOSTNAME/configuration.nix`):
-   ```nix
-   # Replace KDE Plasma configuration
-   services.displayManager.sddm.enable = true;
-   services.desktopManager.plasma6.enable = true;
-   
-   # With GNOME configuration
-   services.displayManager.gdm.enable = true;
-   services.desktopManager.gnome.enable = true;
-   ```
-
-2. **Update user packages** to include GNOME extensions and tools
-
-3. **Add dconf settings** for GNOME customization if needed
-
-4. **Rebuild and reboot**
-
-## Flake Inputs
-
-This configuration uses:
-- **nixpkgs**: NixOS unstable
-- **home-manager**: User environment management
-- **lanzaboote**: Secure boot support
-- **hyprland**: Wayland compositor
-- **disko**: Declarative disk partitioning
-- **impermanence**: Stateless system support
-- **rust-overlay**: Rust toolchain management
-- **NUR**: Community package repository
-
-## Update Inputs
+## Common Commands
 
 ```bash
+# Build without switching
+nixos-rebuild build --flake .#main
+
+# Build and switch
+sudo nixos-rebuild switch --flake .#main
+
+# Enter dev shell
+nix develop
+
+# Format code
+nix fmt
+
 # Update all inputs
-nix flake update github:iagosrodrigues/dotfiles
+nix flake update
 
 # Update specific input
-nix flake lock --update-input nixpkgs github:iagosrodrigues/dotfiles
+nix flake lock --update-input nixpkgs
+
+# Show flake structure
+nix flake show
 ```
 
-## Available Outputs
+## Adding New Configuration
 
-- `nixosConfigurations.*`: System configurations
-- `nixosModules.*`: Reusable NixOS modules
-- `homeModules.*`: Reusable home-manager modules
-- `packages.*`: Custom packages
-- `formatter.*`: Code formatter (Alejandra)
+### Adding a New NixOS Module
+
+Create a file in the appropriate directory:
+
+```nix
+# modules/system/bluetooth.nix
+{...}: {
+  flake.modules.nixos.bluetooth = {
+    hardware.bluetooth.enable = true;
+    services.blueman.enable = true;
+  };
+}
+```
+
+It will be automatically discovered and included.
+
+### Adding a New Home-Manager Module
+
+```nix
+# modules/apps/neovim.nix
+{...}: {
+  flake.modules.homeManager.neovim = {pkgs, ...}: {
+    programs.neovim = {
+      enable = true;
+      defaultEditor = true;
+    };
+  };
+}
+```
+
+### Adding a New Host
+
+1. Create hardware config:
+
+```nix
+# modules/hardware/newhost.nix
+{...}: {
+  flake.modules.nixos.hardware-newhost = {
+    boot.loader.systemd-boot.enable = true;
+    # ... hardware-specific config
+  };
+}
+```
+
+2. Create host definition:
+
+```nix
+# modules/hosts/newhost.nix
+{inputs, config, ...}: let
+  nixosModules = builtins.attrValues config.flake.modules.nixos;
+  hmModules = builtins.attrValues config.flake.modules.homeManager;
+in {
+  flake.nixosConfigurations.newhost = inputs.nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
+    modules = nixosModules ++ [{
+      home-manager.sharedModules = hmModules ++ [
+        inputs.niri.homeModules.niri
+      ];
+    }];
+  };
+}
+```
+
+## Private Flake Integration
+
+Private configurations are loaded from `modules/private/default.nix`:
+
+```nix
+{inputs, ...}: {
+  flake.modules.nixos.private = inputs.private.nixosModules.default or {};
+  flake.modules.homeManager.private = inputs.private.homeModules.default or {};
+}
+```
+
+To use SSH for the private flake, update `flake.nix`:
+
+```nix
+private = {
+  url = "git+ssh://git@github.com/yourusername/nixos-private";
+  inputs.nixpkgs.follows = "nixpkgs";
+};
+```
+
+## Overlays
+
+Configured in `modules/flake/nixpkgs.nix`:
+
+- `nur.overlays.default` - Nix User Repository
+- `niri.overlays.niri` - Niri compositor
+- `ghostty.overlays.default` - Ghostty terminal
+
+## Dev Shell
+
+Available tools (`nix develop`):
+
+- `alejandra` - Nix formatter
+- `deadnix` - Dead code finder
+- `nixpkgs-fmt` - Alternative formatter
+- `statix` - Nix linter
+- `nil` - Nix LSP
+
+## Troubleshooting
+
+### "attribute 'X' missing"
+Check the module is exporting to the correct path (`flake.modules.nixos.*` or `flake.modules.homeManager.*`)
+
+### "infinite recursion"
+Check for circular imports or option references between modules
+
+### Module not found
+Make sure the file is tracked by git (`git add`)
+
+### Build fails after adding module
+Check syntax with `nix flake check` or try `nix eval .#nixosConfigurations.main`
+
+## Rollback
+
+```bash
+# Select previous generation in bootloader
+
+# Or rebuild with rollback
+sudo nixos-rebuild switch --rollback
+
+# Or specify a generation
+sudo nixos-rebuild switch --rollback-to 42
+```
+
+## Resources
+
+- [flake-parts documentation](https://flake.parts/)
+- [import-tree](https://github.com/vic/import-tree)
+- [NixOS Manual](https://nixos.org/manual/nixos/stable/)
+- [Home Manager Manual](https://nix-community.github.io/home-manager/)
+
+---
+
+**Philosophy:** Modular, discoverable, and maintainable. Each concern lives in its own file, automatically composed into a complete system.
