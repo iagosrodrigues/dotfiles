@@ -2,10 +2,6 @@
   description = "Main NixOS configuration";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nvf = {
-      url = "github:NotAShelf/nvf";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nur.url = "github:nix-community/NUR";
     flake-utils.url = "github:numtide/flake-utils";
     rust-overlay.url = "github:oxalica/rust-overlay";
@@ -22,12 +18,23 @@
       url = "github:kamadorueda/alejandra/4.0.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hyprland = {
-      url = "github:hyprwm/Hyprland";
-    };
-    kwin-effects-forceblur = {
-      url = "github:taj-ny/kwin-effects-forceblur";
+    hytale-launcher.url = "github:JPyke3/hytale-launcher-nix";
+
+    # private = {
+    #   url = "git+ssh://git@github.com/iagosrodrigues/nixos-private";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+    private = {
+      url = "path:/home/iago/personal/nixos-private";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    niri.url = "github:sodiboo/niri-flake";
+
+    ashell.url = "github:MalpenZibo/ashell";
+
+    ghostty = {
+      url = "github:ghostty-org/ghostty";
     };
   };
   outputs = inputs: let
@@ -62,6 +69,7 @@
                 pkgs
                 config
                 lib
+                inputs
                 ;
               hmLib = inputs.home-manager.lib;
             })
@@ -69,16 +77,16 @@
           discoveredUsers;
         useGlobalPkgs = true;
         useUserPackages = true;
-        sharedModules = [inputs.nvf.homeManagerModules.default] ++ (attrValues discoveredHomeModules);
+        sharedModules =
+          attrValues discoveredHomeModules
+          ++ [
+            inputs.private.homeModules.default
+            inputs.niri.homeModules.niri
+          ];
       };
     };
   in {
     lib = localLib;
-    nixosModules =
-      discoveredNixosModules
-      // {
-        generateUsers = userModule;
-      };
     homeModules = discoveredHomeModules;
     formatter = localLib.forAllSystems (system: legacyPackages.${system}.alejandra);
     packages = localLib.forAllSystems (
@@ -87,6 +95,21 @@
       in
         mapAttrs (name: pkgFunc: pkgFunc {inherit pkgs;}) discoveredPackages
     );
+
+    devShells = localLib.forAllSystems (system: let
+      pkgs = legacyPackages.${system};
+    in {
+      default = pkgs.mkShell {
+        nativeBuildInputs = with pkgs; [
+          alejandra
+          deadnix
+          nixpkgs-fmt
+          nodejs
+          statix
+        ];
+      };
+    });
+
     nixosConfigurations =
       mapAttrs (
         hostname: hostData: let
@@ -117,17 +140,16 @@
                     config.allowUnfree = true;
                     overlays = [
                       inputs.nur.overlays.default
-                      (final: prev: {
-                        kwin-effects-forceblur = inputs.kwin-effects-forceblur.packages.${system}.default;
-                      })
+                      inputs.niri.overlays.niri
+                      inputs.ghostty.overlays.default
                     ];
                   };
                 }
               ]
-              # ++ [inputs.chaotic.nixosModules.default]
               ++ (attrValues discoveredNixosModules)
               ++ (lib.optionals hasUsers [
                 inputs.home-manager.nixosModules.home-manager
+                inputs.private.nixosModules.default
                 userModule
               ]);
           }

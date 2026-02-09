@@ -268,9 +268,5 @@ in {
     matchBlocks."*" = {
       identityAgent = "${onePassPath}";
     };
-    matchBlocks."*.lojasrenner.io" = {
-      identityAgent = "${onePassPath}";
-      proxyCommand = "nc -x 192.168.122.237:1080 -X 5 %h %p";
-    };
   };
 }

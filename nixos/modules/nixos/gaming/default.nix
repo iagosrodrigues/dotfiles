@@ -108,6 +108,11 @@ in {
       "w /sys/kernel/mm/transparent_hugepage/shmem_enabled - - - - advise"
     ];
 
+    fileSystems."/home/iago/.local/share/Steam/Downloads" = {
+      device = "/home/iago/Downloads";
+      options = ["bind" "nofail"];
+    };
+
     programs.steam = lib.mkIf cfg.steam.enable {
       enable = lib.mkDefault true;
       package = pkgs.steam.override {
@@ -124,6 +129,10 @@ in {
     hardware.graphics = {
       enable = true;
       enable32Bit = true;
+      extraPackages = with pkgs; [
+        libva
+        rocmPackages.clr.icd
+      ];
     };
 
     programs.gamemode = {
@@ -151,6 +160,11 @@ in {
           end = lib.mkDefault "${pkgs.libnotify}/bin/notify-send 'GameMode Ended'";
         };
       };
+    };
+
+    programs.envision = {
+      enable = true;
+      openFirewall = true;
     };
 
     services.wivrn = lib.mkIf cfg.wivrn.enable {
