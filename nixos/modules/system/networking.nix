@@ -1,11 +1,6 @@
-{ ... }:
-let
-  hostname = "darkplace";
-in
-{
+_: {
   flake.modules.nixos.networking = {
     networking = {
-      hostName = hostname;
       networkmanager.enable = true;
     };
 

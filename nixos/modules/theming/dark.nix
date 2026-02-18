@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   flake.modules.homeManager.dark-theme =
     { pkgs, ... }:
     {
@@ -41,8 +40,8 @@
 
       home.pointerCursor = {
         gtk.enable = true;
-        name = "WhiteSur-cursors";
-        package = pkgs.whitesur-cursors;
+        name = "macOS";
+        package = pkgs.apple-cursor;
         size = 48;
       };
     };

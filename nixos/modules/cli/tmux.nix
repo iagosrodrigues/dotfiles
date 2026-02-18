@@ -1,8 +1,5 @@
-{ ... }:
-{
-  flake.modules.homeManager.tmux =
-    { ... }:
-    {
-      programs.tmux.enable = true;
-    };
+_: {
+  flake.modules.homeManager.tmux = _: {
+    programs.tmux.enable = true;
+  };
 }

@@ -1,54 +1,60 @@
-{ ... }:
-{
+_: {
   flake.modules.homeManager.ashell =
-    { ... }:
+    { config, lib, ... }:
+    let
+      cfg = config.local.desktop.ashell;
+    in
     {
-      programs.ashell = {
-        enable = true;
-        settings = {
-          log_level = "error";
-          outputs = "All";
-          position = "Top";
-          app_launcher_cmd = "fuzzel";
+      options.local.desktop.ashell.enable = lib.mkEnableOption "Ashell status bar";
 
-          modules = {
-            left = [
-              "AppLauncher"
-              "Workspaces"
-              "WindowTitle"
-            ];
-            center = [ "MediaPlayer" ];
-            right = [
-              "Tray"
-              "SystemInfo"
-              [
-                "Clock"
-                "Clipboard"
-                "Privacy"
-                "Settings"
-              ]
-            ];
-          };
+      config = lib.mkIf cfg.enable {
+        programs.ashell = {
+          enable = true;
+          settings = {
+            log_level = "error";
+            outputs = "All";
+            position = "Top";
+            app_launcher_cmd = "fuzzel";
 
-          workspaces = {
-            visibility_mode = "All";
-            enable_workspace_filling = false;
-          };
+            modules = {
+              left = [
+                "AppLauncher"
+                "Workspaces"
+                "WindowTitle"
+              ];
+              center = [ "MediaPlayer" ];
+              right = [
+                "Tray"
+                "SystemInfo"
+                [
+                  "Clock"
+                  "Clipboard"
+                  "Privacy"
+                  "Settings"
+                ]
+              ];
+            };
 
-          system = {
-            cpu_warn_threshold = 60;
-            cpu_alert_threshold = 80;
-            mem_warn_threshold = 70;
-            mem_alert_threshold = 85;
-            temp_warn_threshold = 60;
-            temp_alert_threshold = 80;
-          };
+            workspaces = {
+              visibility_mode = "All";
+              enable_workspace_filling = false;
+            };
 
-          settings = { };
+            system = {
+              cpu_warn_threshold = 60;
+              cpu_alert_threshold = 80;
+              mem_warn_threshold = 70;
+              mem_alert_threshold = 85;
+              temp_warn_threshold = 60;
+              temp_alert_threshold = 80;
+            };
 
-          appearance = {
-            style = "Islands";
-            opacity = 1.0;
+            settings = { };
+
+            appearance = {
+              style = "Islands";
+              opacity = 1.0;
+            };
           };
         };
       };

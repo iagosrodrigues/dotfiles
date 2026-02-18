@@ -1,19 +1,17 @@
-{ ... }:
-{
-  flake.modules.homeManager.ghostty =
-    { ... }:
-    {
-      programs.ghostty = {
-        enable = true;
-        enableFishIntegration = true;
+_: {
+  flake.modules.homeManager.ghostty = _: {
+    programs.ghostty = {
+      enable = true;
+      enableFishIntegration = true;
 
-        settings = {
-          font-family = "0xProto";
-          font-size = 18;
-          theme = "Gruvbox Material";
-          command = "/etc/profiles/per-user/iago/bin/fish";
-          scrollbar = "system";
-        };
+      settings = {
+        background-opacity = 0.8;
+        command = "/etc/profiles/per-user/iago/bin/fish";
+        font-family = "Lilex";
+        font-size = 18;
+        scrollbar = "system";
+        theme = "Gruvbox Material";
       };
     };
+  };
 }

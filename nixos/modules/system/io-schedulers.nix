@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   flake.modules.nixos.io-schedulers = {
     services.udev.extraRules = ''
       # HDD - set BFQ scheduler

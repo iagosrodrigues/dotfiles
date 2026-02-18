@@ -39,10 +39,8 @@ in
               btop
               cargo
               clang
-              code-cursor
               codex
               davinci-resolve-studio
-              dejavu_fonts
               discord
               eza
               fd
@@ -51,10 +49,7 @@ in
               gemini-cli
               google-chrome
               google-java-format
-              ibm-plex
-              inconsolata
               inputs.hytale-launcher.packages.${pkgs.stdenv.hostPlatform.system}.default
-              inter
               jetbrains.idea
               jujutsu
               ladybird
@@ -63,6 +58,8 @@ in
               nil
               nix-output-monitor
               nixd
+              nixfmt
+              nodejs
               opencode
               p7zip
               ripgrep
@@ -81,6 +78,8 @@ in
               EDITOR = "nvim";
               NIXOS_OZONE_WL = "1";
               MOZ_ENABLE_WAYLAND = "1";
+              GTK_IM_MODULE = "simple";
+              QT_IM_MODULE = "simple";
             };
           };
 
@@ -90,9 +89,6 @@ in
             EDITOR = "nvim";
             MOZ_ENABLE_WAYLAND = "1";
             NIXOS_OZONE_WL = "1";
-            GTK_IM_MODULE = "cedilla";
-            QT_IM_MODULE = "cedilla";
-            GSETTINGS_SCHEMA_DIR = "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}/glib-2.0/schemas";
           };
         };
     };

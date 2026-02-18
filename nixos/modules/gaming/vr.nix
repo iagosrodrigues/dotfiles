@@ -1,16 +1,29 @@
-{ ... }:
-{
-  flake.modules.nixos.vr = {
-    programs.envision = {
-      enable = true;
-      openFirewall = true;
-    };
+_: {
+  flake.modules.nixos.vr =
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
+    let
+      cfg = config.local.gaming.vr;
+    in
+    {
+      options.local.gaming.vr.enable = lib.mkEnableOption "VR support (Envision and WiVRn)";
 
-    services.wivrn = {
-      enable = true;
-      openFirewall = true;
-      defaultRuntime = true;
-      autoStart = true;
+      config = lib.mkIf cfg.enable {
+        services.wivrn = {
+          enable = true;
+          openFirewall = true;
+          defaultRuntime = true;
+          autoStart = false;
+          # steam.importOXRRuntimes = true;
+        };
+
+        environment.systemPackages = with pkgs; [
+          wayvr
+        ];
+      };
     };
-  };
 }
