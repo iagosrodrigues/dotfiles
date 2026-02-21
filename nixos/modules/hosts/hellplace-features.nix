@@ -13,7 +13,8 @@ _: {
       };
 
       # Desktop
-      desktop.gnome.enable = true;
+      # desktop.gnome.enable = true;
+      desktop.kde.enable = true;
       desktop.niri.enable = true;
 
       # Apps
@@ -31,7 +32,8 @@ _: {
     local = {
       desktop = {
         # Desktop
-        gnome.enable = true;
+        # gnome.enable = true;
+        kde.enable = true;
         niri.enable = true;
         ashell.enable = true;
       };

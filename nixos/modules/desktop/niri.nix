@@ -21,7 +21,7 @@
           config = lib.mkIf cfg.enable {
             programs.niri = {
               enable = true;
-              package = pkgs.niri-unstable;
+              package = pkgs.niri-stable;
             };
           };
         };

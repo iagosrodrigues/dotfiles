@@ -9,7 +9,7 @@ _: {
         command = "/etc/profiles/per-user/iago/bin/fish";
         font-family = "Lilex";
         font-size = 18;
-        scrollbar = "system";
+        # scrollbar = "system";
         theme = "Gruvbox Material";
       };
     };

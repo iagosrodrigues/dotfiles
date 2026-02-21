@@ -95,7 +95,7 @@ _: {
           };
 
           "org/gnome/desktop/wm/preferences" = {
-            button-layout = "close,maximize,minimize:appmenu";
+            button-layout = "appmenu:minimize,maximize,close";
           };
 
           "org/gnome/desktop/input-sources" = {

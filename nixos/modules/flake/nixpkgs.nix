@@ -15,7 +15,7 @@
       overlays = [
         inputs.nur.overlays.default
         inputs.niri.overlays.niri
-        inputs.ghostty.overlays.default
+        # inputs.ghostty.overlays.default
       ];
     };
   };

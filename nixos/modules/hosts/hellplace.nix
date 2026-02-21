@@ -8,14 +8,15 @@ let
   hm = config.flake.modules.homeManager;
 
   sharedNixosModules = with nixos; [
+    # gnome
     audio
     fonts
     gamemode
     gaming-graphics
-    gnome
     home-manager-base
     iago
     io-schedulers
+    kde
     lact
     networking
     niri
@@ -32,14 +33,17 @@ let
   ];
 
   sharedHmModules = with hm; [
+    # dark-theme
+    # gnome
+    # kde-dark
     ashell
     browsers
-    dark-theme
     dev-tools
     ghostty
     git
-    gnome
+    kde
     media
+    mouse-config
     niri
     niri-config
     private
@@ -117,7 +121,9 @@ let
           ".local/share/fish"
           ".local/share/keyrings"
           ".local/share/nix"
+          ".local/share/opencode"
           ".local/share/zed"
+          ".local/state/wireplumber"
 
           # Application config
           ".config/1Password"
@@ -126,7 +132,20 @@ let
           ".config/discord"
           ".config/libvirt"
           ".config/obs-studio"
+          ".config/opencode"
           ".config/zed"
+
+          # KDE Plasma state
+          ".config/kde.org"
+          ".config/kdedefaults"
+          ".config/plasma-org.kde.plasma.desktop-appletsrc"
+          ".local/share/kscreen"
+          ".local/share/plasma"
+          ".local/share/kwalletd"
+          ".local/share/recently-used.xbel"
+
+          # Cache Vulkan shaders
+          ".cache/mesa_shader_cache"
 
           # Crypto / Auth
           ".gnupg"

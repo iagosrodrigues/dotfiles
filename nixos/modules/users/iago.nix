@@ -32,6 +32,13 @@ in
             homeDirectory = "/home/${username}";
             stateVersion = "25.05";
 
+            pointerCursor = {
+              gtk.enable = true;
+              name = "macOS";
+              package = pkgs.apple-cursor;
+              size = 48;
+            };
+
             packages = with pkgs; [
               (ollama.override { acceleration = "rocm"; })
               _1password-cli
@@ -60,6 +67,7 @@ in
               nixd
               nixfmt
               nodejs
+              # nvtopPackages.amd
               opencode
               p7zip
               ripgrep
@@ -71,7 +79,7 @@ in
               unixtools.xxd
               unzip
               wl-clipboard
-              xwayland-satellite
+              # xwayland-satellite
             ];
 
             sessionVariables = {

@@ -1,6 +1,10 @@
 _: {
   flake.modules.nixos.onepassword =
-    { config, lib, ... }:
+    {
+      config,
+      lib,
+      ...
+    }:
     let
       cfg = config.local.apps.onepassword;
     in

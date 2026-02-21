@@ -18,6 +18,11 @@
     sops-nix.url = "github:Mic92/sops-nix";
     disko.url = "github:nix-community/disko";
     impermanence.url = "github:nix-community/impermanence";
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
 
     private = {
       url = "git+ssh://git@github.com/iagosrodrigues/nixos-private.git";

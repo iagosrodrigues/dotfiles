@@ -51,11 +51,10 @@ _: {
         rocmPackages.rocm-runtime
       ];
 
-      # Swap (on dedicated btrfs subvolume @swap)
       swapDevices = [
         {
           device = "/swap/swapfile";
-          size = 32 * 1024; # 32GB (matches RAM for hibernation)
+          size = 32 * 1024;
         }
       ];
 
