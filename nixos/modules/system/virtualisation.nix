@@ -1,38 +1,25 @@
 _: {
   flake.modules.nixos.virtualisation =
+    { pkgs, ... }:
     {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
-    let
-      cfg = config.local.system.virtualisation;
-    in
-    {
-      options.local.system.virtualisation.enable =
-        lib.mkEnableOption "Virtualisation support (libvirt, Docker)";
-
-      config = lib.mkIf cfg.enable {
-        virtualisation = {
-          libvirtd = {
-            enable = true;
-            qemu = {
-              swtpm.enable = true;
-            };
-          };
-
-          spiceUSBRedirection.enable = true;
-
-          docker = {
-            enable = true;
-            enableOnBoot = false;
+      virtualisation = {
+        libvirtd = {
+          enable = true;
+          qemu = {
+            swtpm.enable = true;
           };
         };
 
-        environment.systemPackages = with pkgs; [
-          virt-manager
-        ];
+        spiceUSBRedirection.enable = true;
+
+        docker = {
+          enable = true;
+          enableOnBoot = false;
+        };
       };
+
+      environment.systemPackages = with pkgs; [
+        virt-manager
+      ];
     };
 }

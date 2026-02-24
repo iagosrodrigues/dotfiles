@@ -8,47 +8,39 @@ let
   hm = config.flake.modules.homeManager;
 
   sharedNixosModules = with nixos; [
-    # gnome
     audio
     fonts
-    gamemode
-    gaming-graphics
+    gnome
     home-manager-base
     iago
     io-schedulers
-    kde
-    lact
     networking
     niri
     nix-settings
     nixpkgs-config
     onepassword
+    printing
     private
     shell
     sops
     steam
+    tailscale
     virtualisation
     vr
     yubikey
   ];
 
   sharedHmModules = with hm; [
-    # dark-theme
-    # gnome
-    # kde-dark
     ashell
-    browsers
     dev-tools
     ghostty
     git
-    kde
-    media
-    mouse-config
+    gnome
     niri
     niri-config
     private
     shell
-    tmux
+    steam
     zed
   ];
 
@@ -56,11 +48,12 @@ let
 
   nixosModules = sharedNixosModules ++ [
     nixos.hellplace-hardware
-    nixos.hellplace-features
     inputs.disko.nixosModules.disko
     inputs.impermanence.nixosModules.impermanence
     diskoConfig
     {
+      networking.hostName = "hellplace";
+
       fileSystems."/persist".neededForBoot = true;
 
       # Declarative password management (impermanence wipes /etc/shadow)
@@ -77,7 +70,6 @@ let
 
           # Network
           "/var/lib/NetworkManager"
-          "/var/lib/tailscale"
           "/etc/NetworkManager/system-connections"
 
           # Virtualisation
@@ -106,7 +98,6 @@ let
   ];
 
   hmModules = sharedHmModules ++ [
-    hm.hellplace-features
     {
       home.persistence."/persist" = {
         directories = [
@@ -115,14 +106,12 @@ let
           "Projects"
 
           # Application state
-          ".local/share/Steam"
           ".local/share/TelegramDesktop"
           ".local/share/direnv"
           ".local/share/fish"
           ".local/share/keyrings"
           ".local/share/nix"
           ".local/share/opencode"
-          ".local/share/zed"
           ".local/state/wireplumber"
 
           # Application config
@@ -133,16 +122,6 @@ let
           ".config/libvirt"
           ".config/obs-studio"
           ".config/opencode"
-          ".config/zed"
-
-          # KDE Plasma state
-          ".config/kde.org"
-          ".config/kdedefaults"
-          ".config/plasma-org.kde.plasma.desktop-appletsrc"
-          ".local/share/kscreen"
-          ".local/share/plasma"
-          ".local/share/kwalletd"
-          ".local/share/recently-used.xbel"
 
           # Cache Vulkan shaders
           ".cache/mesa_shader_cache"

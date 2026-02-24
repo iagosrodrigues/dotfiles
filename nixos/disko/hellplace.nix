@@ -35,6 +35,13 @@
                 name = "cryptroot";
                 settings = {
                   allowDiscards = true;
+                  # FIDO2 (YubiKey) is the primary unlock method.
+                  # systemd-cryptsetup will fall back to a passphrase keyslot
+                  # automatically if FIDO2 fails — but only if one is registered.
+                  #
+                  # To add a password fallback (do this once, manually):
+                  #   sudo cryptsetup luksAddKey /dev/disk/by-id/nvme-Samsung_SSD_980_PRO_2TB_S69ENF0W808555E-part2
+                  # (authenticate with the YubiKey when prompted, then enter the new passphrase)
                   crypttabExtraOpts = [ "fido2-device=auto" ];
                 };
                 content = {

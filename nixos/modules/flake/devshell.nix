@@ -2,7 +2,7 @@ _: {
   perSystem =
     { pkgs, ... }:
     {
-      formatter = pkgs.pkgs.nixfmt;
+      formatter = pkgs.nixfmt;
 
       devShells.default = pkgs.mkShell {
         nativeBuildInputs = with pkgs; [

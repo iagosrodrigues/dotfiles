@@ -19,13 +19,18 @@ in
           "video"
           "wheel"
         ];
-        shell = pkgs.fish;
+        # shell = pkgs.fish;
       };
 
       home-manager.users.${username} =
         { pkgs, ... }:
         {
           programs.home-manager.enable = true;
+
+          programs.brave.enable = true;
+          programs.mpv.enable = true;
+          programs.tmux.enable = true;
+          programs.fish.enable = true;
 
           home = {
             inherit username;
@@ -40,52 +45,55 @@ in
             };
 
             packages = with pkgs; [
-              (ollama.override { acceleration = "rocm"; })
+              # (ollama.override { acceleration = "rocm"; })
+              # codex
+              # gemini-cli
+              # google-chrome
+              # google-java-format
+              # ladybird
+              # mongodb-compass
+              # nix-output-monitor
+              # rocmPackages.rocm-smi
+              # xwayland-satellite
               _1password-cli
               android-tools
               btop
               cargo
               clang
-              codex
               davinci-resolve-studio
               discord
               eza
               fd
               ffmpeg
               fuzzel
-              gemini-cli
-              google-chrome
-              google-java-format
-              inputs.hytale-launcher.packages.${pkgs.stdenv.hostPlatform.system}.default
+              # inputs.hytale-launcher.packages.${pkgs.stdenv.hostPlatform.system}.default
               jetbrains.idea
               jujutsu
-              ladybird
+              libreoffice-still
               lmstudio
-              mongodb-compass
               nil
-              nix-output-monitor
               nixd
               nixfmt
               nodejs
-              # nvtopPackages.amd
               opencode
               p7zip
               ripgrep
-              rocmPackages.rocm-smi
               statix
-              tailscale
               telegram-desktop
               transmission_4-gtk
               unixtools.xxd
               unzip
               wl-clipboard
-              # xwayland-satellite
             ];
 
             sessionVariables = {
               EDITOR = "nvim";
+              # Wayland compatibility
               NIXOS_OZONE_WL = "1";
               MOZ_ENABLE_WAYLAND = "1";
+              QT_QPA_PLATFORM = "wayland";
+              SDL_VIDEODRIVER = "wayland";
+              GDK_BACKEND = "wayland";
               GTK_IM_MODULE = "simple";
               QT_IM_MODULE = "simple";
             };
@@ -95,8 +103,6 @@ in
 
           systemd.user.sessionVariables = {
             EDITOR = "nvim";
-            MOZ_ENABLE_WAYLAND = "1";
-            NIXOS_OZONE_WL = "1";
           };
         };
     };

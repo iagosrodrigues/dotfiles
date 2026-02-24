@@ -1,8 +1,6 @@
 _: {
   flake.modules.nixos.networking = {
-    networking = {
-      networkmanager.enable = true;
-    };
+    networking.networkmanager.enable = true;
 
     time.timeZone = "America/Fortaleza";
 
@@ -13,11 +11,6 @@ _: {
 
     console.keyMap = "us";
 
-    services = {
-      tailscale.enable = true;
-      gnome.gnome-keyring.enable = true;
-      timesyncd.enable = true;
-      printing.enable = true;
-    };
+    services.timesyncd.enable = true;
   };
 }

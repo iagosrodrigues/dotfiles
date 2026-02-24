@@ -12,9 +12,6 @@ _: {
         ];
         userSettings = {
           vim_mode = true;
-          features = {
-            edit_prediction_provider = "copilot";
-          };
           lsp = {
             tinymist = {
               settings = {
@@ -48,5 +45,9 @@ _: {
           }
         ];
       };
+      home.persistence."/persist".directories = [
+        ".local/share/zed"
+        ".config/zed"
+      ];
     };
 }

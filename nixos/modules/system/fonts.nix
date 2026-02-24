@@ -10,7 +10,7 @@ _: {
         ibm-plex
         inconsolata
         inter
-        jetbrains-mono
+        nerd-fonts.jetbrains-mono
         julia-mono
         lilex
         maple-mono.variable
