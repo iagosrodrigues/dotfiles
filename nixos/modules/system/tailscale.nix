@@ -5,4 +5,8 @@ _: {
       "/var/lib/tailscale"
     ];
   };
+
+  flake.modules.homeManager.tailscale = _: {
+    services.tailscale-systray.enable = true;
+  };
 }

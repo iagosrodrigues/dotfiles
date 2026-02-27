@@ -41,6 +41,7 @@ let
     private
     shell
     steam
+    tailscale
     zed
   ];
 
@@ -132,6 +133,8 @@ let
 
           # AI / ML
           ".ollama"
+          ".lmstudio"
+          ".config/LM Studio"
         ];
       };
     }
