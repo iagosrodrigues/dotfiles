@@ -36,6 +36,7 @@ let
     ghostty
     git
     gnome
+    helium-browser
     niri
     niri-config
     private
@@ -113,6 +114,7 @@ let
           ".local/share/keyrings"
           ".local/share/nix"
           ".local/share/opencode"
+          ".local/share/zoxide"
           ".local/state/wireplumber"
 
           # Application config
@@ -123,6 +125,8 @@ let
           ".config/libvirt"
           ".config/obs-studio"
           ".config/opencode"
+
+          ".icons"
 
           # Cache Vulkan shaders
           ".cache/mesa_shader_cache"

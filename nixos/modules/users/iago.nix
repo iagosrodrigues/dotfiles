@@ -50,11 +50,12 @@ in
               # gemini-cli
               # google-chrome
               # google-java-format
+              # inputs.hytale-launcher.packages.${pkgs.stdenv.hostPlatform.system}.default
               # ladybird
+              # libreoffice-still
               # mongodb-compass
               # nix-output-monitor
               # rocmPackages.rocm-smi
-              # xwayland-satellite
               _1password-cli
               android-tools
               btop
@@ -66,10 +67,9 @@ in
               fd
               ffmpeg
               fuzzel
-              # inputs.hytale-launcher.packages.${pkgs.stdenv.hostPlatform.system}.default
+              gh
               jetbrains.idea
               jujutsu
-              libreoffice-still
               lmstudio
               nil
               nixd
@@ -84,6 +84,7 @@ in
               unixtools.xxd
               unzip
               wl-clipboard
+              xwayland-satellite
             ];
 
             sessionVariables = {

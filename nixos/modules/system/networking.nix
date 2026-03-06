@@ -6,7 +6,6 @@ _: {
 
     i18n = {
       defaultLocale = "en_US.UTF-8";
-      inputMethod.enable = false;
     };
 
     console.keyMap = "us";

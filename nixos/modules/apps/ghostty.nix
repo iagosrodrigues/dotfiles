@@ -7,7 +7,7 @@ _: {
       settings = {
         background-opacity = 0.8;
         command = "/etc/profiles/per-user/iago/bin/fish";
-        font-family = "Lilex";
+        font-family = "Jetbrains Mono";
         font-size = 18;
         # scrollbar = "system";
         theme = "Gruvbox Material";

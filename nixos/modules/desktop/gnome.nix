@@ -88,7 +88,7 @@ _: {
           sources = [
             (lib.gvariant.mkTuple [
               "xkb"
-              "us+intl"
+              "us+alt-intl"
             ])
           ];
         };
