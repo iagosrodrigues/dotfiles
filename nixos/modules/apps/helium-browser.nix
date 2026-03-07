@@ -6,8 +6,6 @@ let
       lib,
       appimageTools,
       fetchurl,
-      makeDesktopItem,
-      copyDesktopItems,
     }:
     let
       pname = "helium-browser";
@@ -32,24 +30,46 @@ let
         url = "https://github.com/imputnet/helium-linux/releases/download/${version}/helium-${version}-${release.arch}.AppImage";
         hash = release.hash;
       };
+
+      appimageContents = appimageTools.extractType2 {
+        inherit pname version src;
+      };
     in
     appimageTools.wrapType2 {
       inherit pname version src;
-      nativeBuildInputs = [ copyDesktopItems ];
+      extraInstallCommands = ''
+        desktopFile=""
 
-      desktopItems = [
-        (makeDesktopItem {
-          name = pname;
-          desktopName = "Helium Browser";
-          exec = pname;
-          icon = pname;
-          categories = [
-            "Network"
-            "WebBrowser"
-          ];
-          startupWMClass = "helium";
-        })
-      ];
+        for candidate in \
+          ${appimageContents}/*.desktop \
+          ${appimageContents}/usr/share/applications/*.desktop
+        do
+          if [ -e "$candidate" ]; then
+            desktopFile="$candidate"
+            break
+          fi
+        done
+
+        if [ -n "$desktopFile" ]; then
+          install -Dm444 "$desktopFile" "$out/share/applications/${pname}.desktop"
+          sed -i \
+            -e 's|^Exec=.*|Exec=${pname} %U|' \
+            -e 's|^Icon=.*|Icon=${pname}|' \
+            "$out/share/applications/${pname}.desktop"
+        fi
+
+        if [ -d ${appimageContents}/usr/share/icons ]; then
+          mkdir -p "$out/share/icons"
+          cp -r ${appimageContents}/usr/share/icons/* "$out/share/icons/"
+        fi
+
+        if [ -f ${appimageContents}/.DirIcon ]; then
+          mkdir -p "$out/share/pixmaps"
+          install -m444 \
+            ${appimageContents}/.DirIcon \
+            "$out/share/pixmaps/${pname}.png"
+        fi
+      '';
 
       meta = with lib; {
         description = "Privacy-focused browser built from Chromium";

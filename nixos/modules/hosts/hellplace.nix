@@ -35,14 +35,16 @@ let
     dev-tools
     ghostty
     git
+    personal-git
     gnome
     helium-browser
     niri
     niri-config
-    private
     shell
+    ssh
     steam
     tailscale
+    work-git
     zed
   ];
 
@@ -66,6 +68,13 @@ let
           path = "/persist/secrets/iago-password";
           owner = "root";
           group = "root";
+          mode = "0400";
+        };
+
+        age.secrets.git-personal = {
+          rekeyFile = ../../secrets/git-personal.age;
+          owner = "iago";
+          group = "users";
           mode = "0400";
         };
 
