@@ -105,7 +105,8 @@ All configuration lives in `./modules/`. The import-tree recursively imports all
 | `ashell` | Status bar for niri |
 | `hytale-launcher` | Hytale game launcher |
 | `rust-overlay` | Rust toolchain overlay |
-| `private` | Private configurations |
+| `agenix` | Encrypted secrets with age |
+| `agenix-rekey` | Rekey secrets per host |
 
 ## Module Types
 
@@ -269,25 +270,13 @@ in {
 }
 ```
 
-## Private Flake Integration
+## Secrets Management
 
-Private configurations are loaded from `modules/private/default.nix`:
+Secrets are managed in-repo with `agenix` + `agenix-rekey`.
 
-```nix
-{inputs, ...}: {
-  flake.modules.nixos.private = inputs.private.nixosModules.default or {};
-  flake.modules.homeManager.private = inputs.private.homeModules.default or {};
-}
-```
-
-To use SSH for the private flake, update `flake.nix`:
-
-```nix
-private = {
-  url = "git+ssh://git@github.com/yourusername/nixos-private";
-  inputs.nixpkgs.follows = "nixpkgs";
-};
-```
+- Base configuration lives in `modules/system/agenix.nix`
+- Secret files and rekeyed outputs live under `secrets/`
+- Setup and daily commands are documented in `secrets/README.md`
 
 ## Overlays
 

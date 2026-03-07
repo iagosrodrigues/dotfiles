@@ -16,6 +16,11 @@
     hytale-launcher.url = "github:JPyke3/hytale-launcher-nix";
     rust-overlay.url = "github:oxalica/rust-overlay";
     sops-nix.url = "github:Mic92/sops-nix";
+    agenix.url = "github:ryantm/agenix";
+    agenix-rekey = {
+      url = "github:oddlama/agenix-rekey";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     disko.url = "github:nix-community/disko";
     impermanence.url = "github:nix-community/impermanence";
     plasma-manager = {
@@ -24,11 +29,18 @@
       inputs.home-manager.follows = "home-manager";
     };
 
-    private = {
-      url = "git+ssh://git@github.com/iagosrodrigues/nixos-private.git";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
+  outputs =
+    inputs:
+    inputs.flake-parts.lib.mkFlake
+      {
+        inherit inputs;
+      }
+      {
+        imports = [
+          inputs.agenix-rekey.flakeModule
+          (inputs.import-tree ./modules)
+        ];
+      };
 }

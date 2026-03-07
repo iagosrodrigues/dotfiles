@@ -1,6 +1,6 @@
 _: {
   perSystem =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     {
       formatter = pkgs.nixfmt;
 
@@ -10,11 +10,12 @@ _: {
           nil
           nixfmt
           statix
+          config.agenix-rekey.package
         ];
 
         shellHook = ''
           echo "NixOS development environment"
-          echo "Available commands: nixfmt, deadnix, statix, nil"
+          echo "Available commands: nixfmt, deadnix, statix, nil, agenix"
         '';
       };
     };

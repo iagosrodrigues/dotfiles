@@ -1,5 +1,4 @@
-{ inputs, ... }:
-{
-  flake.modules.nixos.private = inputs.private.nixosModules.default or { };
-  flake.modules.homeManager.private = inputs.private.homeModules.default or { };
+_: {
+  flake.modules.nixos.private = { };
+  flake.modules.homeManager.private = _: { };
 }

@@ -9,6 +9,7 @@ let
 
   sharedNixosModules = with nixos; [
     audio
+    agenix
     fonts
     gnome
     home-manager-base
@@ -22,7 +23,6 @@ let
     printing
     private
     shell
-    sops
     steam
     tailscale
     virtualisation
@@ -53,50 +53,61 @@ let
     inputs.disko.nixosModules.disko
     inputs.impermanence.nixosModules.impermanence
     diskoConfig
-    {
-      networking.hostName = "hellplace";
+    (
+      { config, ... }:
+      {
+        networking.hostName = "hellplace";
 
-      fileSystems."/persist".neededForBoot = true;
+        fileSystems."/persist".neededForBoot = true;
 
-      # Declarative password management (impermanence wipes /etc/shadow)
-      users.mutableUsers = false;
-      users.users.iago.hashedPasswordFile = "/persist/secrets/iago-password";
+        # Declarative password management (impermanence wipes /etc/shadow)
+        age.secrets.iago-password = {
+          rekeyFile = ../../secrets/iago-password.age;
+          path = "/persist/secrets/iago-password";
+          owner = "root";
+          group = "root";
+          mode = "0400";
+        };
 
-      environment.persistence."/persist" = {
-        hideMounts = true;
-        directories = [
-          # Core system state
-          "/var/log"
-          "/var/lib/nixos"
-          "/var/lib/systemd/coredump"
+        users.mutableUsers = false;
+        users.users.iago.hashedPasswordFile = config.age.secrets.iago-password.path;
 
-          # Network
-          "/var/lib/NetworkManager"
-          "/etc/NetworkManager/system-connections"
+        environment.persistence."/persist" = {
+          hideMounts = true;
+          directories = [
+            # Core system state
+            "/var/log"
+            "/var/lib/nixos"
+            "/var/lib/systemd/coredump"
 
-          # Virtualisation
-          "/var/lib/docker"
-          "/var/lib/libvirt"
+            # Network
+            "/var/lib/NetworkManager"
+            "/etc/NetworkManager/system-connections"
 
-          # Services
-          "/var/lib/cups"
-          "/var/lib/AccountsService"
+            # Virtualisation
+            "/var/lib/docker"
+            "/var/lib/libvirt"
 
-          # Audio (persistent volume levels)
-          "/var/lib/pipewire"
-        ];
-        files = [
-          "/etc/machine-id"
-          "/etc/adjtime"
+            # Services
+            "/var/lib/cups"
+            "/var/lib/AccountsService"
 
-          # SSH host keys (prevent fingerprint change on reboot)
-          "/etc/ssh/ssh_host_rsa_key"
-          "/etc/ssh/ssh_host_rsa_key.pub"
-          "/etc/ssh/ssh_host_ed25519_key"
-          "/etc/ssh/ssh_host_ed25519_key.pub"
-        ];
-      };
-    }
+            # Audio (persistent volume levels)
+            "/var/lib/pipewire"
+          ];
+          files = [
+            "/etc/machine-id"
+            "/etc/adjtime"
+
+            # SSH host keys (prevent fingerprint change on reboot)
+            "/etc/ssh/ssh_host_rsa_key"
+            "/etc/ssh/ssh_host_rsa_key.pub"
+            "/etc/ssh/ssh_host_ed25519_key"
+            "/etc/ssh/ssh_host_ed25519_key.pub"
+          ];
+        };
+      }
+    )
   ];
 
   hmModules = sharedHmModules ++ [
